@@ -1,6 +1,6 @@
 import { backgroundColour } from "./background.colours";
 import { fontColors } from "./font.colors";
-import { fontSize } from "./font.sizes";
+import { fontSize, fontWeight } from "./font.sizes";
 import { fontFamily } from "./font.family";
 
 const MainTheme = {
@@ -8,6 +8,7 @@ const MainTheme = {
   fontColors,
   fontSize,
   fontFamily,
+  fontWeight,
 };
 
 export default MainTheme;

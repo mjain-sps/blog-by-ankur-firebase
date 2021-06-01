@@ -17,6 +17,7 @@ const getPosts = async (req, res) => {
 
 //Controller which will handle POST request to add new post to the db
 const addPost = async (req, res) => {
+    const { title, body,  } = req.body
   console.log("ROUTE HIT with request", req);
   const postsCollectionRef = db.collection("posts").doc();
 
@@ -24,7 +25,7 @@ const addPost = async (req, res) => {
     title: "Test",
   });
   console.log(postAdded);
-  res.send("POST request page", postAdded);
+  res.( postAdded);
 };
 
 module.exports = { getPosts, addPost };

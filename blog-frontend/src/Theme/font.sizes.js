@@ -7,3 +7,12 @@ export const fontSize = {
   XXL: "32px",
   XXXL: "36px",
 };
+
+export const fontWeight = {
+  light: "300",
+  regular: "400",
+  medium: "500",
+  bold: "700",
+  bolder: "800",
+  extraBold: "900",
+};
