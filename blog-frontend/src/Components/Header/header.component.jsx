@@ -32,6 +32,7 @@ class Header extends React.Component {
     super();
     this.state = {
       currentNavItem: "",
+      viewSubNavBar: false,
     };
   }
   render() {
@@ -79,7 +80,7 @@ class Header extends React.Component {
                 onMouseEnter={() =>
                   this.setState({ currentNavItem: "LIFESTYLE" })
                 }
-                onMouseLeave={() => this.setState({ currentNavItem: "" })}
+                // onMouseLeave={() => this.setState({ currentNavItem: "" })}
                 currenthover={this.state.currentNavItem}
               >
                 LIFESTYLE
@@ -107,16 +108,18 @@ class Header extends React.Component {
               <FontIcon icon={faSearch} />
             </SearchBar>
           </Navbar>
-          {this.state.currentNavItem && (
-            <SubHeaderContainer>
-              {this.state.currentNavItem === "LIFESTYLE" && (
-                <LifeStyleSubHeader />
-              )}
-              {this.state.currentNavItem === "OUTFITS" && (
-                <OutfitsStyleSubHeader />
-              )}
-            </SubHeaderContainer>
-          )}
+
+          <SubHeaderContainer
+            onMouseEnter={() => this.setState({ viewSubNavBar: true })}
+            onMouseLeave={() => this.setState({ viewSubNavBar: false })}
+          >
+            {this.state.currentNavItem === "LIFESTYLE" && (
+              <LifeStyleSubHeader />
+            )}
+            {this.state.currentNavItem === "OUTFITS" && (
+              <OutfitsStyleSubHeader />
+            )}
+          </SubHeaderContainer>
         </HeaderContainer>
       </>
     );
