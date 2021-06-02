@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   LifeStyleContainer,
   LifeStyleSideNav,
@@ -8,7 +8,7 @@ import {
 
 //importing the relevant data
 import lifeStylesData from "../../../Data-Files/LifeStyle-SubHeader";
-import lifeStylesFashionData from "../../../Data-Files/LifeStyle-SubHeader";
+
 //importing common components
 import CardComponentSubHeader from "../Common-Components/common.components";
 class LifeStyleSubHeader extends React.Component {
