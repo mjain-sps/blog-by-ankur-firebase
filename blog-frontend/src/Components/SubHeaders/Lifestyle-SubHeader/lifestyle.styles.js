@@ -5,7 +5,7 @@ const LifeStyleContainer = styled.div`
   grid-template-columns: 1fr 3fr;
   width: 100%;
   height: 100%;
-  /* overflow: hidden; */
+  overflow: hidden;
 `;
 const LifeStyleSideNav = styled.div`
   background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};

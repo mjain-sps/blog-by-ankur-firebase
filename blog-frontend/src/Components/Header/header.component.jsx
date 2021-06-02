@@ -31,11 +31,25 @@ class Header extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      currentNavItem: "",
+      toggleSubHeader: false,
       viewSubNavBar: false,
+      currentNav: "HOME",
     };
   }
+
+  handleSubNavBarToggleON = () => {
+    this.setState({ toggleSubHeader: true });
+  };
+
+  handleSubNavBarToggleOFF = () => {
+    this.setState({ toggleSubHeader: false });
+  };
+
+  setCurrentSubNav = (subHeaderName) => {
+    this.setState({ currentNav: subHeaderName });
+  };
   render() {
+    console.log(this.state);
     const currentDate = new Date();
     return (
       <>
@@ -68,6 +82,7 @@ class Header extends React.Component {
               >
                 HOME
               </NavItem>
+
               <NavItem
                 to="/lifestyle"
                 name="LIFESTYLE"
@@ -76,31 +91,76 @@ class Header extends React.Component {
                     ? "CURRENT"
                     : null
                 }
-                onMouseEnter={() =>
-                  this.setState({ currentNavItem: "LIFESTYLE" })
-                }
-                // onMouseLeave={() => this.setState({ currentNavItem: "" })}
-                currenthover={this.state.currentNavItem}
+                onMouseEnter={() => {
+                  this.handleSubNavBarToggleON();
+                  this.setCurrentSubNav("LIFESTYLE");
+                }}
+                onMouseLeave={this.handleSubNavBarToggleOFF}
               >
                 LIFESTYLE
               </NavItem>
+
               <NavItem
                 to="/outfits"
                 name="OUTFITS"
                 currentpath={
                   this.props.location.pathname === "/outfits" ? "CURRENT" : null
                 }
-                onMouseEnter={() =>
-                  this.setState({ currentNavItem: "OUTFITS" })
-                }
-                onMouseLeave={() => this.setState({ currentNavItem: "" })}
-                currenthover={this.state.currentNavItem}
+                onMouseEnter={() => {
+                  this.handleSubNavBarToggleON();
+                  this.setCurrentSubNav("OUTFITS");
+                }}
+                onMouseLeave={this.handleSubNavBarToggleOFF}
               >
                 OUTFITS
               </NavItem>
-              <NavItem to="/haircare">HAIRCARE</NavItem>
-              <NavItem to="/makeup">MAKEUP</NavItem>
-              <NavItem to="/beauty">BEAUTY</NavItem>
+
+              <NavItem
+                to="/haircare"
+                name="HAIRCARE"
+                currentpath={
+                  this.props.location.pathname === "/haircare"
+                    ? "CURRENT"
+                    : null
+                }
+                onMouseEnter={() => {
+                  this.handleSubNavBarToggleON();
+                  this.setCurrentSubNav("HAIRCARE");
+                }}
+                onMouseLeave={this.handleSubNavBarToggleOFF}
+              >
+                HAIRCARE
+              </NavItem>
+
+              <NavItem
+                to="/makeup"
+                name="MAKEUP"
+                currentpath={
+                  this.props.location.pathname === "/makeup" ? "CURRENT" : null
+                }
+                onMouseEnter={() => {
+                  this.handleSubNavBarToggleON();
+                  this.setCurrentSubNav("MAKEUP");
+                }}
+                onMouseLeave={this.handleSubNavBarToggleOFF}
+              >
+                MAKEUP
+              </NavItem>
+
+              <NavItem
+                to="/beauty"
+                name="BEAUTY"
+                currentpath={
+                  this.props.location.pathname === "/beauty" ? "CURRENT" : null
+                }
+                onMouseEnter={() => {
+                  this.handleSubNavBarToggleON();
+                  this.setCurrentSubNav("BEAUTY");
+                }}
+                onMouseLeave={this.handleSubNavBarToggleOFF}
+              >
+                BEAUTY
+              </NavItem>
             </NavItemsContainer>
 
             <SearchBar>
@@ -108,17 +168,15 @@ class Header extends React.Component {
             </SearchBar>
           </Navbar>
 
-          <SubHeaderContainer
-            onMouseEnter={() => this.setState({ viewSubNavBar: true })}
-            onMouseLeave={() => this.setState({ viewSubNavBar: false })}
-          >
-            {this.state.currentNavItem === "LIFESTYLE" && (
-              <LifeStyleSubHeader />
-            )}
-            {this.state.currentNavItem === "OUTFITS" && (
-              <OutfitsStyleSubHeader />
-            )}
-          </SubHeaderContainer>
+          {this.state.toggleSubHeader && (
+            <SubHeaderContainer
+              onMouseEnter={this.handleSubNavBarToggleON}
+              onMouseLeave={this.handleSubNavBarToggleOFF}
+            >
+              {this.state.currentNav === "LIFESTYLE" && <LifeStyleSubHeader />}
+              {this.state.currentNav === "OUTFITS" && <OutfitsStyleSubHeader />}
+            </SubHeaderContainer>
+          )}
         </HeaderContainer>
       </>
     );

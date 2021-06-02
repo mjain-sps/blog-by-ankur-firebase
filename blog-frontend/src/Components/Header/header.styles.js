@@ -50,13 +50,26 @@ const NavItemsContainer = styled.div`
   width: 60%;
 `;
 
+const SubHeaderContainer = styled.div`
+  display: block;
+  width: 70%;
+  height: 200px;
+  margin-top: 10px;
+  margin: 9px auto;
+  background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};
+`;
 const NavItem = styled(Link)`
   text-decoration: none;
   color: ${MainTheme.fontColors.black};
   font-family: ${MainTheme.fontFamily.montiserrat};
   margin: 0px 20px;
+  &:hover {
+    border-bottom: 1px solid pink;
+    border-width: 2px;
+  }
+
   ${(props) =>
-    props.currentpath || props.currenthover === props.name
+    props.currentpath
       ? css`
           border-bottom: 1px solid pink;
         `
@@ -69,14 +82,6 @@ const SearchBar = styled.div`
   text-align: end;
 `;
 
-const SubHeaderContainer = styled.div`
-  display: block;
-  width: 70%;
-  height: 200px;
-  margin: auto;
-  border: 1px solid black;
-  background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};
-`;
 const FontIcon = styled(FontAwesomeIcon)`
   margin: 0px 10px;
   font-size: ${MainTheme.fontSize.large};

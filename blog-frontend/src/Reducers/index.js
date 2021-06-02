@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import { blogSnapShotReducer } from "./blogs.reducer";
+import { getBlogReducer } from "./blogs.reducer";
 
 const rootReducer = combineReducers({
-  blogSnapshot: blogSnapShotReducer,
+  blogSnapshot: getBlogReducer,
 });
 
 export default rootReducer;

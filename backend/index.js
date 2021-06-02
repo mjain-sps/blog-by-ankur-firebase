@@ -17,6 +17,6 @@ app.use(cors());
 app.use(express.json());
 
 //Lets start using the routes
-app.use("/", PostRoutes);
+app.use("/api", PostRoutes);
 
 app.listen(PORT, () => console.log(`APP is running on port ${PORT}`.success));

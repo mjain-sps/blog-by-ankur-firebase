@@ -17,15 +17,17 @@ const getPosts = async (req, res) => {
 
 //Controller which will handle POST request to add new post to the db
 const addPost = async (req, res) => {
-    const { title, body,  } = req.body
-  console.log("ROUTE HIT with request", req);
-  const postsCollectionRef = db.collection("posts").doc();
+  const { title, category } = req.body;
+  try {
+    db.collection("posts").doc().set({
+      title,
+      category,
+    });
 
-  const postAdded = await postsCollectionRef.set({
-    title: "Test",
-  });
-  console.log(postAdded);
-  res.( postAdded);
+    res.status(200).json({ message: "Blog Added Successfully" });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 module.exports = { getPosts, addPost };

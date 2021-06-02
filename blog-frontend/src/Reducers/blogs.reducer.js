@@ -1,29 +1,25 @@
-import {
-  GET_BLOG_SNAPSHOTS_LOADING,
-  GET_BLOG_SNAPSHOTS_SUCCESS,
-  GET_BLOG_SNAPSHOTS_ERROR,
-} from "../Action-Types/blog.types";
+import { getBlog, postBlog } from "../Action-Types/blog.types";
 const initialState = {
   loading: false,
   blogSnapshot: [],
   error: null,
 };
 
-export const blogSnapShotReducer = (state = initialState, action) => {
-  console.log("from reducer", action);
+//Reducer to Get the Data from Blog
+export const getBlogReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_BLOG_SNAPSHOTS_LOADING:
+    case getBlog.GET_BLOG_SNAPSHOTS_LOADING:
       return {
         ...state,
         loading: true,
       };
-    case GET_BLOG_SNAPSHOTS_SUCCESS:
+    case getBlog.GET_BLOG_SNAPSHOTS_SUCCESS:
       return {
         ...state,
         loading: false,
         blogSnapshot: [...state.blogSnapshot, action.payload],
       };
-    case GET_BLOG_SNAPSHOTS_ERROR:
+    case getBlog.GET_BLOG_SNAPSHOTS_ERROR:
       return {
         ...state,
         loading: false,
