@@ -1,5 +1,6 @@
 import { getBlog } from "../Action-Types/blog.types";
-import { db } from "../Firebase/db";
+import firebase from "../Firebase/db";
+const db = firebase.firestore();
 
 //Actions Related to GET Blog info from DB
 export const getBlogSnapShotStart = () => ({
@@ -23,11 +24,12 @@ export const getBlogSnapShotAsync = () => async (dispatch) => {
     const postsSnapShot = await db.collection("posts").get();
     if (!postsSnapShot.empty) {
       postsArray = postsSnapShot.docs.map((post) => {
-        return { id: post.id, title: post.data() };
+        const { title, category } = post.data();
+        return { id: post.id, title, category };
       });
     }
 
-    dispatch(getBlogSnapShotSuccess(postsArray));
+    dispatch(getBlogSnapShotSuccess(...postsArray));
   } catch (error) {
     const errorMessage =
       error.response && error.response.data.message

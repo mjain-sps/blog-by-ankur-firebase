@@ -49,7 +49,6 @@ class Header extends React.Component {
     this.setState({ currentNav: subHeaderName });
   };
   render() {
-    console.log(this.state);
     const currentDate = new Date();
     return (
       <>

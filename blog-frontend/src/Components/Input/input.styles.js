@@ -3,11 +3,12 @@ import MainTheme from "../../Theme";
 
 const Input = styled.input`
   outline: none;
+
   border: none;
   display: block;
   margin: 10px auto;
-  padding: 20px;
-  width: 90%;
+  padding: 15px;
+  width: 100%;
   font-size: ${MainTheme.fontSize.medium};
   font-family: ${MainTheme.fontFamily.montiserrat};
 

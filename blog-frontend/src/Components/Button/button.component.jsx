@@ -12,7 +12,7 @@ class ButtonComponent extends React.Component {
         type={type}
         onClick={onClick}
         theme={theme}
-        width={width ? width : 90}
+        width={width ? width : 100}
       >
         {children}
       </Button>

@@ -7,13 +7,17 @@ class InputComponent extends React.Component {
   }
 
   render() {
-    const { placeholder, value, onChange, name } = this.props;
+    const { placeholder, value, onChange, name, maxLength, type, id } =
+      this.props;
     return (
       <Input
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         name={name}
+        maxLength={maxLength}
+        type={type}
+        id={id}
       />
     );
   }

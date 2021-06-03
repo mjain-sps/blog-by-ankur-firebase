@@ -6,6 +6,24 @@ import { getBlogSnapShotAsync } from "../../Actions/blogs.actions";
 
 //importing Loader
 import LoaderComponent from "../../Components/Loader/loader.component";
+
+//importing IMAGES
+import section1Image from "../../Assets/Home-Page/MainPage/section-two.jpg";
+import featuredImage1 from "../../Assets/Home-Page/MainPage/featured-image-1.jpg";
+//importing styled components
+import {
+  HomeSection1Container,
+  HomeSection2Container,
+  Title,
+  CardContainer,
+  CardWithSingleImage,
+  CardWithMultipleImage,
+  ImageWrapper,
+  BlogSynposisImageOverLay,
+  BackDrop,
+  HomeImageTag,
+} from "./home.styles.js";
+//Main component starts
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +42,52 @@ class HomeScreen extends React.Component {
     ) : (
       blogs && (
         <Layout>
-          <h1>I am the home page</h1>
+          <HomeSection1Container>
+            <img src={section1Image} alt="" />
+          </HomeSection1Container>
+
+          <HomeSection2Container>
+            <Title>FEATURED</Title>
+            <CardContainer>
+              <CardWithSingleImage>
+                <BackDrop />
+                <BlogSynposisImageOverLay>
+                  <span>Hi I am Madhur Jain</span>
+                </BlogSynposisImageOverLay>
+                <HomeImageTag src={featuredImage1} alt="" />
+              </CardWithSingleImage>
+              <CardWithMultipleImage>
+                <ImageWrapper>
+                  <BackDrop />
+                  <BlogSynposisImageOverLay>
+                    <span>Hi I am Madhur Jain</span>
+                  </BlogSynposisImageOverLay>
+                  <HomeImageTag src={featuredImage1} alt="" />
+                </ImageWrapper>
+                <ImageWrapper>
+                  <BackDrop />
+                  <BlogSynposisImageOverLay>
+                    <span>Hi I am Madhur Jain</span>
+                  </BlogSynposisImageOverLay>
+                  <HomeImageTag src={featuredImage1} alt="" />
+                </ImageWrapper>
+                <ImageWrapper>
+                  <BackDrop />
+                  <BlogSynposisImageOverLay>
+                    <span>Hi I am Madhur Jain</span>
+                  </BlogSynposisImageOverLay>
+                  <HomeImageTag src={featuredImage1} alt="" />
+                </ImageWrapper>
+                <ImageWrapper>
+                  <BackDrop />
+                  <BlogSynposisImageOverLay>
+                    <span>Hi I am Madhur Jain</span>
+                  </BlogSynposisImageOverLay>
+                  <HomeImageTag src={featuredImage1} alt="" />
+                </ImageWrapper>
+              </CardWithMultipleImage>
+            </CardContainer>
+          </HomeSection2Container>
         </Layout>
       )
     );

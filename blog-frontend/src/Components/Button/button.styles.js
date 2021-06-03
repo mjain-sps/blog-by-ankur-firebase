@@ -6,7 +6,7 @@ const Button = styled.button`
   text-align: center;
   font-family: ${MainTheme.fontFamily.roboto};
   font-weight: ${MainTheme.fontWeight.bolder};
-  margin: 0px 5%;
+  cursor: pointer;
   ${(props) => css`
     background-color: ${MainTheme.buttonTheme[props.theme].backgroundColor};
     color: ${MainTheme.buttonTheme[props.theme].color};
