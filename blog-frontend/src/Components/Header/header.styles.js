@@ -23,6 +23,14 @@ const SocialMediaDiv = styled.div`
   font-size: ${MainTheme.fontSize.medium};
   font-weight: ${MainTheme.fontWeight.medium};
 `;
+const SocialMediaDivRightSideContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  a {
+    color: ${MainTheme.fontColors.black};
+  }
+`;
 const LogoSection = styled.div`
   height: 78%;
   text-align: center;
@@ -100,4 +108,5 @@ export {
   NavItem,
   SearchBar,
   SubHeaderContainer,
+  SocialMediaDivRightSideContainer,
 };
