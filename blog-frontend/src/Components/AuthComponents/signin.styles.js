@@ -2,7 +2,6 @@ import styled, { css } from "styled-components";
 import MainTheme from "../../Theme";
 
 const AuthContainer = styled.div`
-  width: 40vw;
   height: 70vh;
   margin: auto;
   border: 1px solid rgba(125, 125, 125, 0.4);

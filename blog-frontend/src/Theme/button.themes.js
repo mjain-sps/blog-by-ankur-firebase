@@ -15,4 +15,8 @@ export const buttonTheme = {
     backgroundColor: "#ffb74d",
     color: "#ffffff",
   },
+  google: {
+    backgroundColor: "#DC143C",
+    color: "#ffffff",
+  },
 };

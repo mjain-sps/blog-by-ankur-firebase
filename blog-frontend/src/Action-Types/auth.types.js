@@ -9,3 +9,9 @@ export const signInTypes = {
   SIGN_IN_SUCCESS: "SIGN_IN_SUCCESS",
   SIGN_IN_ERROR: "SIGN_IN_ERROR",
 };
+
+export const logoutTypes = {
+  LOGOUT_LOADING: "LOGOUT_LOADING",
+  LOGOUT_SUCCESS: "LOGOUT_SUCCESS",
+  LOGOUT_ERROR: "LOGOUT_ERROR",
+};

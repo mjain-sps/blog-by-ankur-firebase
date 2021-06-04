@@ -1,5 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux";
+
 //importing the styled compoments
 import {
   HeaderContainer,
@@ -14,24 +16,30 @@ import {
   SubHeaderContainer,
   SocialMediaDivRightSideContainer,
 } from "./header.styles.js";
-
+//importing font awsome icons - BRAND
 import {
   faFacebookSquare,
   faLinkedin,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
-import { faSearch, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+//importing font awsome icons - SOLID
+import {
+  faSearch,
+  faSignInAlt,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 //importing Logo
 import logo from "../../Assets/Home-Page/Logo.jpeg";
 //importing the SubHeader Components
 import LifeStyleSubHeader from "../SubHeaders/Lifestyle-SubHeader/lifestyle.subheader.component";
 import OutfitsStyleSubHeader from "../SubHeaders/Outfits-SubHeader/outfits.subheader.component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+//importing ACTIONS
+import { logoutAction } from "../../Actions/auth.actions.js";
 //Main Component Starts
 class Header extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       toggleSubHeader: false,
       viewSubNavBar: false,
@@ -49,6 +57,12 @@ class Header extends React.Component {
 
   setCurrentSubNav = (subHeaderName) => {
     this.setState({ currentNav: subHeaderName });
+  };
+
+  handleSignOut = () => {
+    //Dispatching Action
+    const { logoutAction } = this.props;
+    logoutAction();
   };
   render() {
     const currentDate = new Date();
@@ -70,9 +84,15 @@ class Header extends React.Component {
                 </span>
               </div>
               <div>
-                <Link to="/signin">
-                  <FontAwesomeIcon icon={faSignInAlt} />
-                </Link>
+                {!this.props.currentUser.user ? (
+                  <Link to="/signin">
+                    <FontAwesomeIcon icon={faSignInAlt} />
+                  </Link>
+                ) : (
+                  <Link to="/" onClick={this.handleSignOut}>
+                    <FontAwesomeIcon icon={faSignOutAlt} />
+                  </Link>
+                )}
               </div>
             </SocialMediaDivRightSideContainer>
           </SocialMediaDiv>
@@ -191,4 +211,11 @@ class Header extends React.Component {
   }
 }
 
-export default withRouter(Header);
+const mapStateToProps = (state) => ({
+  currentUser: state.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  logoutAction: () => dispatch(logoutAction()),
+});
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

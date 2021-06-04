@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+
 import {
   AuthContainer,
   AuthTitle,
@@ -9,75 +11,110 @@ import {
   AuthLabel,
 } from "../signin.styles";
 
+//importing some relevant components
+import LoadingComponent from "../../Loader/loader.component";
+import Messages from "../../Notifications/messages.component";
+
 import ButtonComponent from "../../Button/button.component";
-import { isUserAuthenticated } from "../../../Firebase/db";
+
+//importint sign in Action
+import { signInUserAction } from "../../../Actions/auth.actions.js";
 
 //Main component starts here
 class SigninComponent extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: "",
       password: "",
     };
   }
-  //Defining all the functions here
 
+  //To check if user is already logged in
+  componentDidUpdate() {
+    const { user } = this.props.currentUser;
+    if (user) {
+      this.props.history.push("/");
+    }
+  }
+
+  //Defining all the functions here
   handleLogin = async (e) => {
     e.preventDefault();
     if (!this.state.email || !this.state.password) {
       alert("Please fill the details. ");
     } else {
       const { email, password } = this.state;
-      const user = await isUserAuthenticated(email, password);
-      console.log(user);
+      const userCredentials = { email, password };
+      this.props.signInUserAction(userCredentials);
     }
   };
+
   //Main Component render starts here
   render() {
+    const { loading, error } = this.props.currentUser;
     return (
       <>
-        <AuthContainer>
-          <AuthTitle>
-            <span>Sign In</span>
-          </AuthTitle>
+        {loading ? (
+          <LoadingComponent />
+        ) : (
+          <>
+            {error && <Messages>{error}</Messages>}
+            <AuthContainer>
+              <AuthTitle>
+                <span>Sign In</span>
+              </AuthTitle>
 
-          <AuthForm>
-            <AuthFormControl>
-              <AuthInput
-                type="email"
-                id="email"
-                value={this.state.email}
-                onChange={(e) => this.setState({ email: e.target.value })}
-              />
-              <AuthLabel htmlFor="email">Enter Email</AuthLabel>
-            </AuthFormControl>
+              <AuthForm>
+                <AuthFormControl>
+                  <AuthInput
+                    type="email"
+                    id="email"
+                    value={this.state.email}
+                    onChange={(e) => this.setState({ email: e.target.value })}
+                  />
+                  <AuthLabel htmlFor="email">Enter Email</AuthLabel>
+                </AuthFormControl>
 
-            <AuthFormControl>
-              <AuthInput
-                type="password"
-                id="password"
-                value={this.state.password}
-                onChange={(e) => this.setState({ password: e.target.value })}
-              />
-              <AuthLabel>Password</AuthLabel>
-            </AuthFormControl>
-            <ButtonComponent
-              type="submit"
-              onClick={this.handleLogin}
-              theme="primary"
-              width="50"
-            >
-              Login
-            </ButtonComponent>
-          </AuthForm>
-          <h5>
-            Not a user <Link to="/signup">Sign up</Link>
-          </h5>
-        </AuthContainer>
+                <AuthFormControl>
+                  <AuthInput
+                    type="password"
+                    id="password"
+                    value={this.state.password}
+                    onChange={(e) =>
+                      this.setState({ password: e.target.value })
+                    }
+                  />
+                  <AuthLabel>Password</AuthLabel>
+                </AuthFormControl>
+                <ButtonComponent
+                  type="submit"
+                  onClick={this.handleLogin}
+                  theme="primary"
+                  width="50"
+                >
+                  Login
+                </ButtonComponent>
+              </AuthForm>
+              <h5>
+                Not a user <Link to="/signup">Sign up</Link>
+              </h5>
+            </AuthContainer>
+          </>
+        )}
       </>
     );
   }
 }
+const mapStateToProps = (state) => ({
+  currentUser: state.user,
+});
 
-export default SigninComponent;
+const mapDispatchToProps = (dispatch) => ({
+  signInUserAction: (userCredentials) =>
+    dispatch(signInUserAction(userCredentials)),
+});
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(SigninComponent)
+);

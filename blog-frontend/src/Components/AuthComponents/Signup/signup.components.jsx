@@ -11,7 +11,7 @@ import {
 
 import ButtonComponent from "../../Button/button.component";
 import Messages from "../../Notifications/messages.component";
-
+import LoaderComponent from "../../Loader/loader.component";
 //importing Actions
 import { signUpAction } from "../../../Actions/auth.actions";
 
@@ -23,11 +23,16 @@ class Signup extends React.Component {
       email: "",
       password: "",
       password2: "",
-      errorCode: "",
-      errorMessage: "",
+      user: null,
     };
   }
 
+  componentDidUpdate() {
+    const { user } = this.props.currentUser;
+    if (user) {
+      this.props.history.push("/");
+    }
+  }
   //All functions go here
 
   handleSignup = async (e) => {
@@ -37,19 +42,20 @@ class Signup extends React.Component {
     } else if (this.state.password !== this.state.password2) {
       alert("password do not match");
     } else {
-      this.props.signUpUser();
-      //   const resp = await registerUser(email, password);
-      //   if (resp.uid) {
-      //   } else {
-      //     const { errorCode, errorMessage } = resp;
-      //     this.setState({ errorCode, errorMessage });
-      //   }
-      //   console.log(resp);
+      const { email, password } = this.state;
+      const userData = { email, password };
+      this.props.signUpAction(userData);
     }
   };
 
   render() {
-    return (
+    const { loading, error } = this.props.currentUser;
+
+    return loading ? (
+      <LoaderComponent />
+    ) : error ? (
+      <Messages>{error}</Messages>
+    ) : (
       <AuthContainer>
         <Messages>
           {this.state.errorMessage ||
@@ -102,11 +108,11 @@ class Signup extends React.Component {
     );
   }
 }
-const mapDispatchToProps = (dispatch, otherProps) => {
-  const { email, password } = otherProps;
-  const userData = { email, password };
-  return {
-    signUpUser: () => dispatch(signUpAction(userData)),
-  };
-};
-export default connect(null, mapDispatchToProps)(Signup);
+const mapStateToProps = (state) => ({
+  currentUser: state.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  signUpAction: (user) => dispatch(signUpAction(user)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

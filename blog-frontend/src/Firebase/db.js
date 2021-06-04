@@ -17,7 +17,7 @@ firebase.firestore().settings({ timestampsInSnapshots: true });
 //We are setting up the authentication functions here
 
 //Function which takes care of the sign in process
-export const isUserAuthenticated = async (email, password) => {
+export const signInUser = async (email, password) => {
   try {
     const userCredential = await firebase
       .auth()
@@ -32,17 +32,29 @@ export const isUserAuthenticated = async (email, password) => {
 };
 //Function whch takes care of sign up process
 export const registerUser = async (email, password) => {
-  try {
-    const userCredentials = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password);
-    return userCredentials.user;
-  } catch (error) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const errorToBeReturned = { errorCode, errorMessage };
-    return errorToBeReturned;
-  }
+  const resp = await firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password);
+  return resp;
 };
 
+//Adding Provider for Google Sign IN
+var provider = new firebase.auth.GoogleAuthProvider();
+// [END auth_google_provider_create]
+
+// [START auth_google_provider_scopes]
+provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+// [END auth_google_provider_scopes]
+
+// [START auth_google_provider_params]
+provider.setCustomParameters({
+  login_hint: "user@example.com",
+});
+export const signInWithGoogleFunction = () => {
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((resp) => console.log("resp", resp))
+    .catch((err) => console.log("err", err));
+};
 export default firebase;
