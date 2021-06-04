@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
-import MainTheme from "../../../Theme";
+import MainTheme from "../../Theme";
+
 const AuthContainer = styled.div`
   width: 40vw;
   height: 70vh;
@@ -36,35 +37,40 @@ const AuthFormControl = styled.div`
   margin: 10px 0px;
   height: 60px;
   background-color: ${MainTheme.backgroundColour.BG_WHITE};
-  border-bottom: 1px solid ${MainTheme.fontColors.black};
-`;
-const AuthInput = styled.input`
-  outline: none;
-  width: 100%;
-  padding: 10px;
-  display: block;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  border: none;
 `;
 
-const AuthLabel = styled.div`
-  font-family: ${MainTheme.fontFamily.oswald};
+const AuthInput = styled.input`
+  border: none;
+  outline: none;
   font-size: ${MainTheme.fontSize.medium};
-  color: ${MainTheme.fontColors.gray};
+  font-family: ${MainTheme.fontFamily.montiserrat};
+
+  border-bottom: 1px solid black;
   position: absolute;
-  top: 60%;
-  z-index: 2;
-  transition: 200ms ease-in;
+  bottom: 0%;
+  &:focus ~ label {
+    bottom: 40%;
+    font-size: ${MainTheme.fontSize.small};
+    color: ${MainTheme.fontColors.black};
+  }
   ${(props) =>
-    props.name === props.focus || props.value
-      ? css`
-          top: 5%;
-          font-size: ${MainTheme.fontSize.small};
-          color: ${MainTheme.fontColors.black};
-        `
-      : ""}
+    props.value &&
+    css`
+      ~ label {
+        bottom: 40%;
+        font-size: ${MainTheme.fontSize.small};
+        color: ${MainTheme.fontColors.black};
+      }
+    `}
+`;
+
+const AuthLabel = styled.label`
+  position: absolute;
+  bottom: 10%;
+  transition: 200ms ease-in;
+  color: ${MainTheme.fontColors.gray};
+  font-size: ${MainTheme.fontSize.medium};
+  font-family: ${MainTheme.fontFamily.montiserrat};
 `;
 
 export {

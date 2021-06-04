@@ -24,7 +24,25 @@ export const isUserAuthenticated = async (email, password) => {
       .signInWithEmailAndPassword(email, password);
     return userCredential.user;
   } catch (error) {
-    return error.message;
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const errorToBeReturned = { errorCode, errorMessage };
+    return errorToBeReturned;
   }
 };
+//Function whch takes care of sign up process
+export const registerUser = async (email, password) => {
+  try {
+    const userCredentials = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    return userCredentials.user;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const errorToBeReturned = { errorCode, errorMessage };
+    return errorToBeReturned;
+  }
+};
+
 export default firebase;

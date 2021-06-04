@@ -1,44 +1,37 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   AuthContainer,
   AuthTitle,
   AuthInput,
   AuthForm,
-  AuthLabel,
   AuthFormControl,
-} from "./signin.styles";
+  AuthLabel,
+} from "../signin.styles";
 
 import ButtonComponent from "../../Button/button.component";
 import { isUserAuthenticated } from "../../../Firebase/db";
+
+//Main component starts here
 class SigninComponent extends React.Component {
   constructor() {
     super();
     this.state = {
-      focusElement: "",
       email: "",
       password: "",
     };
   }
   //Defining all the functions here
 
-  handleInputChange = (e) => {
-    const { value, name } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  handleFocus = (e) => {
-    const { name } = e.target;
-    this.setState({ focusElement: name });
-  };
-
   handleLogin = async (e) => {
+    e.preventDefault();
     if (!this.state.email || !this.state.password) {
       alert("Please fill the details. ");
     } else {
       const { email, password } = this.state;
       const user = await isUserAuthenticated(email, password);
+      console.log(user);
     }
-    console.log(e);
   };
   //Main Component render starts here
   render() {
@@ -51,39 +44,23 @@ class SigninComponent extends React.Component {
 
           <AuthForm>
             <AuthFormControl>
-              <AuthLabel
-                htmlFor="email"
-                value={this.state.email}
-                name="email"
-                focus={this.state.focusElement}
-              >
-                Enter Email
-              </AuthLabel>
               <AuthInput
                 type="email"
                 id="email"
-                name="email"
-                onFocus={this.handleFocus}
-                onChange={this.handleInputChange}
+                value={this.state.email}
+                onChange={(e) => this.setState({ email: e.target.value })}
               />
+              <AuthLabel htmlFor="email">Enter Email</AuthLabel>
             </AuthFormControl>
 
             <AuthFormControl>
-              <AuthLabel
-                htmlFor="password"
-                name="password"
-                value={this.state.password}
-                focus={this.state.focusElement}
-              >
-                Enter Password
-              </AuthLabel>
               <AuthInput
                 type="password"
-                name="password"
                 id="password"
-                onFocus={this.handleFocus}
-                onChange={this.handleInputChange}
+                value={this.state.password}
+                onChange={(e) => this.setState({ password: e.target.value })}
               />
+              <AuthLabel>Password</AuthLabel>
             </AuthFormControl>
             <ButtonComponent
               type="submit"
@@ -94,6 +71,9 @@ class SigninComponent extends React.Component {
               Login
             </ButtonComponent>
           </AuthForm>
+          <h5>
+            Not a user <Link to="/signup">Sign up</Link>
+          </h5>
         </AuthContainer>
       </>
     );
