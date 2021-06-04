@@ -14,4 +14,17 @@ const fireBaseConfig = {
 const firebase = Firebase.initializeApp(fireBaseConfig);
 firebase.firestore().settings({ timestampsInSnapshots: true });
 
+//We are setting up the authentication functions here
+
+//Function which takes care of the sign in process
+export const isUserAuthenticated = async (email, password) => {
+  try {
+    const userCredential = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+    return userCredential.user;
+  } catch (error) {
+    return error.message;
+  }
+};
 export default firebase;
