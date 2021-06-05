@@ -24,8 +24,25 @@ export const getBlogSnapShotAsync = () => async (dispatch) => {
     const postsSnapShot = await db.collection("posts").get();
     if (!postsSnapShot.empty) {
       postsArray = postsSnapShot.docs.map((post) => {
-        const { title, category } = post.data();
-        return { id: post.id, title, category };
+        const {
+          title,
+          category,
+          author,
+          blogContent,
+          publish,
+          uploadedImageURL,
+          blogSynopsis,
+        } = post.data();
+        return {
+          id: post.id,
+          title,
+          category,
+          author,
+          blogContent,
+          publish,
+          uploadedImageURL,
+          blogSynopsis,
+        };
       });
     }
 

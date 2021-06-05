@@ -6,6 +6,8 @@ const LifeStyleContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  /* margin-top: -15px; */
 `;
 const LifeStyleSideNav = styled.div`
   background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};

@@ -62,8 +62,7 @@ const SubHeaderContainer = styled.div`
   display: block;
   width: 70%;
   height: 200px;
-  margin-top: 10px;
-  margin: 9px auto;
+  margin: -6px auto;
   background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};
 `;
 const NavItem = styled(Link)`

@@ -27,6 +27,8 @@ import {
   faSearch,
   faSignInAlt,
   faSignOutAlt,
+  faCrown,
+  faCrow,
 } from "@fortawesome/free-solid-svg-icons";
 //importing Logo
 import logo from "../../Assets/Home-Page/Logo.jpeg";
@@ -82,6 +84,16 @@ class Header extends React.Component {
                 <span>
                   <FontIcon icon={faYoutube} />
                 </span>
+              </div>
+              <div>
+                {this.props.currentUser &&
+                  this.props.currentUser.user &&
+                  this.props.currentUser.user.uid ===
+                    "MWzRulcpeQd7buPIaPyfiLZrYmG3" && (
+                    <Link to="/admin-home">
+                      {<FontAwesomeIcon icon={faCrown} />}
+                    </Link>
+                  )}
               </div>
               <div>
                 {!this.props.currentUser.user ? (

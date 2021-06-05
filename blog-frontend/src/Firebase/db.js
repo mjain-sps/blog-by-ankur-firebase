@@ -39,7 +39,7 @@ export const registerUser = async (email, password) => {
 };
 
 //Adding Provider for Google Sign IN
-var provider = new firebase.auth.GoogleAuthProvider();
+export const provider = new Firebase.auth.GoogleAuthProvider();
 // [END auth_google_provider_create]
 
 // [START auth_google_provider_scopes]
@@ -50,11 +50,11 @@ provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 provider.setCustomParameters({
   login_hint: "user@example.com",
 });
-export const signInWithGoogleFunction = () => {
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then((resp) => console.log("resp", resp))
-    .catch((err) => console.log("err", err));
-};
+// export const signInWithGoogleFunction = () => {
+//   firebase
+//     .auth()
+//     .signInWithPopup(provider)
+//     .then((resp) => console.log("resp", resp))
+//     .catch((err) => console.log("err", err));
+// };
 export default firebase;

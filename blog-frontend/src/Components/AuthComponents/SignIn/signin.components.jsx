@@ -11,10 +11,6 @@ import {
   AuthLabel,
 } from "../signin.styles";
 
-//importing some relevant components
-import LoadingComponent from "../../Loader/loader.component";
-import Messages from "../../Notifications/messages.component";
-
 import ButtonComponent from "../../Button/button.component";
 
 //importint sign in Action
@@ -52,69 +48,54 @@ class SigninComponent extends React.Component {
 
   //Main Component render starts here
   render() {
-    const { loading, error } = this.props.currentUser;
     return (
       <>
-        {loading ? (
-          <LoadingComponent />
-        ) : (
-          <>
-            {error && <Messages>{error}</Messages>}
-            <AuthContainer>
-              <AuthTitle>
-                <span>Sign In</span>
-              </AuthTitle>
+        <AuthContainer>
+          <AuthTitle>
+            <span>Sign In</span>
+          </AuthTitle>
 
-              <AuthForm>
-                <AuthFormControl>
-                  <AuthInput
-                    type="email"
-                    id="email"
-                    value={this.state.email}
-                    onChange={(e) => this.setState({ email: e.target.value })}
-                  />
-                  <AuthLabel htmlFor="email">Enter Email</AuthLabel>
-                </AuthFormControl>
+          <AuthForm>
+            <AuthFormControl>
+              <AuthInput
+                type="email"
+                id="email"
+                value={this.state.email}
+                onChange={(e) => this.setState({ email: e.target.value })}
+              />
+              <AuthLabel htmlFor="email">Enter Email</AuthLabel>
+            </AuthFormControl>
 
-                <AuthFormControl>
-                  <AuthInput
-                    type="password"
-                    id="password"
-                    value={this.state.password}
-                    onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
-                  />
-                  <AuthLabel>Password</AuthLabel>
-                </AuthFormControl>
-                <ButtonComponent
-                  type="submit"
-                  onClick={this.handleLogin}
-                  theme="primary"
-                  width="50"
-                >
-                  Login
-                </ButtonComponent>
-              </AuthForm>
-              <h5>
-                Not a user <Link to="/signup">Sign up</Link>
-              </h5>
-            </AuthContainer>
-          </>
-        )}
+            <AuthFormControl>
+              <AuthInput
+                type="password"
+                id="password"
+                value={this.state.password}
+                onChange={(e) => this.setState({ password: e.target.value })}
+              />
+              <AuthLabel>Password</AuthLabel>
+            </AuthFormControl>
+            <ButtonComponent
+              type="submit"
+              onClick={this.handleLogin}
+              theme="primary"
+              width="50"
+            >
+              Login
+            </ButtonComponent>
+          </AuthForm>
+          <h5>
+            Not a user <Link to="/signup">Sign up</Link>
+          </h5>
+        </AuthContainer>
       </>
     );
   }
 }
-const mapStateToProps = (state) => ({
-  currentUser: state.user,
-});
 
 const mapDispatchToProps = (dispatch) => ({
   signInUserAction: (userCredentials) =>
     dispatch(signInUserAction(userCredentials)),
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(SigninComponent)
-);
+export default withRouter(connect(null, mapDispatchToProps)(SigninComponent));

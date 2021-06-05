@@ -4,8 +4,7 @@ import {
   logoutTypes,
 } from "../Action-Types/auth.types";
 import { registerUser } from "../Firebase/db";
-import { createUser } from "../Services/Post/createuser.post.servicefile";
-import firebase from "../Firebase/db";
+import firebase, { provider } from "../Firebase/db";
 //Actions regarding Sign Up
 export const signUpAction = (userData) => {
   return async (dispatch) => {
@@ -13,10 +12,6 @@ export const signUpAction = (userData) => {
     try {
       const { email: userDataEmail, password } = userData;
       const user = await registerUser(userDataEmail, password);
-
-      //Make a Post request to firestore to create this user which we have to got after create user
-      const resp = await createUser(user);
-
       dispatch({ type: signupTypes.SIGN_UP_SUCCESS, payload: user });
     } catch (error) {
       const errorReturned = {
@@ -52,6 +47,24 @@ export const signInUserAction = (signInData) => {
   };
 };
 
+//Actions to login using Google, although we are using action types as for sign in with email and password,
+//just because the user can be signed in with any of one of the methods
+export const googleSignInAction = () => {
+  return async (dispatch) => {
+    try {
+      //Lets first dispatch loading
+      dispatch({ type: signInTypes.SIGN_IN_LOADING });
+      //Lets make the google Provider call
+      const { user } = await firebase.auth().signInWithPopup(provider);
+      //Dispatch SUCCESS action
+      dispatch({ type: signInTypes.SIGN_IN_SUCCESS, payload: user });
+    } catch (error) {
+      const errorMessage = `${error.code} ## ${error.message} ## email used to Sign in is ${error.email}`;
+      //dispatch error actions
+      dispatch({ type: signInTypes.SIGN_IN_ERROR, payload: errorMessage });
+    }
+  };
+};
 //Action to logout the user
 
 export const logoutAction = () => {
