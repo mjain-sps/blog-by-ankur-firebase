@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AddBlogFormContainer,
   EditorContainer,
@@ -16,100 +18,84 @@ import { Editor } from "react-draft-wysiwyg";
 import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-//import Services
+//importing Actions
+import {
+  resetStateBeforePostAction,
+  postBlogAction,
+} from "../../../Actions/blogs.actions";
 
-//1. Service which will do a POST requiest to firestore to add the blog post
-import { postBlogService } from "../../../Services/Post/blog.post.servicefile.js";
+import LoaderComponent from "../../../Components/Loader/loader.component.jsx";
 
 //Main Component Starts
-class AddBlogForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      category: "",
-      title: "",
-      message: null,
-      blogSynopsis: "",
-      uploadedImage: "",
-      uploadedImageURL: null,
-      editorState: EditorState.createEmpty(),
-      saveDraft: false,
-      publish: false,
-      author: "",
-    };
-  }
+const AddBlogForm = (props) => {
+  //Lets define React-Redux constants
+  const dispatch = useDispatch();
+  const newPostFromState = useSelector((state) => state.newBlog);
+  const { loading, error, addedBlog } = newPostFromState;
+  //First we want to reset the state on component mount
+  useEffect(() => {
+    dispatch(resetStateBeforePostAction());
+  }, [dispatch]);
 
-  onEditorStateChange = (editorState) => {
-    this.setState({ editorState });
-  };
-  handleInputChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  //Lets define Component State variables
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [blogSynopsis, setBlogSynopsis] = useState("");
+  const [uploadedImage, setUploadedImage] = useState("");
+  const [uploadedImageURL, setUploadedImageURL] = useState(null);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [saveDraft, setSaveDraft] = useState(false);
+  const [author, setAuthor] = useState("");
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
   };
 
-  doFieldValidation = () => {
+  const doFieldValidation = () => {
     if (
-      !this.state.category ||
-      !this.state.title ||
-      !this.state.blogSynopsis ||
-      !this.state.uploadedImage ||
-      !this.state.uploadedImageURL ||
-      !this.author ||
-      !this.state.editorState.getCurrentContent().getPlainText()
+      title !== "" &&
+      category !== "" &&
+      blogSynopsis !== "" &&
+      uploadedImage !== "" &&
+      uploadedImageURL !== null &&
+      author !== "" &&
+      subCategory !== "" &&
+      editorState.getCurrentContent().getPlainText() !== ""
     ) {
       return true;
     } else {
       return false;
     }
   };
-  handlePublish = async (e) => {
+  const handlePublish = async (e) => {
     e.preventDefault();
-    const validated = this.doFieldValidation();
-
+    const validated = doFieldValidation();
     if (!validated) {
       alert(
         "Some Fields are incomplete. Please complete all fields and then submit again"
       );
     }
     if (validated) {
-      this.setState({ publish: true });
-      const {
-        category,
-        title,
-        blogSynopsis,
-        uploadedImageURL,
-        uploadedImage,
-        publish,
-        author,
-      } = this.state;
       const postObject = {
-        category,
+        category: [category, false],
+        subCategory,
         title,
         blogSynopsis,
         uploadedImage,
         uploadedImageURL,
-
-        publish,
+        publish: true,
         author,
-        blogContent: this.state.editorState.getCurrentContent().getPlainText(),
+        blogContent: editorState.getCurrentContent().getPlainText(),
       };
-      postBlogService(postObject)
-        .then(() => this.props.history.push("/"))
-        .catch((err) => console.log(err));
+      console.log(postObject);
+      dispatch(postBlogAction(postObject));
     }
   };
 
-  handleDraft = (e) => {
+  const handleDraft = (e) => {
     e.preventDefault();
-    const {
-      category,
-      title,
-      blogSynopsis,
-      uploadedImageURL,
-      uploadedImage,
-      editorState,
-      publish,
-    } = this.state;
+    setSaveDraft(true);
     const postObject = {
       category,
       title,
@@ -117,89 +103,93 @@ class AddBlogForm extends React.Component {
       uploadedImage,
       uploadedImageURL,
       editorState,
-      publish,
+      publish: false,
+      saveDraft,
     };
-    postBlogService(postObject)
-      .then(() => this.setState({ message: "Draft Saved Successfully" }))
-      .catch((err) => console.log(err));
+    //Handling of draft is still pending
   };
 
-  handleBlogSynopsis = (e) => {
+  const handleBlogSynopsis = (e) => {
     if (e.target.value.length <= e.target.maxLength) {
-      this.setState({ blogSynopsis: e.target.value });
+      setBlogSynopsis(e.target.value);
     }
   };
 
-  handleImageUpload = (e) => {
+  const handleImageUpload = (e) => {
     const fileToBeUploaded = e.target.files[0];
-    this.setState({ uploadedImage: fileToBeUploaded.name });
+    setUploadedImage(fileToBeUploaded.name);
 
-    const storageRef = firebase.storage().ref();
+    const imageUploadedRef = firebase
+      .storage()
+      .ref()
+      .child(`images/${fileToBeUploaded.name}`);
 
-    const imageUploadedRef = storageRef.child(
-      `images/${fileToBeUploaded.name}`
-    );
     const metadata = { contentType: "image/jpeg/png" };
-    const uploadTask = imageUploadedRef.put(fileToBeUploaded, metadata);
-
-    //To check the progress we will add code lates
-    //I have to add code here
-    //to get the download URL
-    uploadTask.snapshot.ref
-      .getDownloadURL()
-      .then((downloadurl) => this.setState({ uploadedImageURL: downloadurl }));
+    imageUploadedRef
+      .put(fileToBeUploaded, metadata)
+      .then(() => imageUploadedRef.getDownloadURL())
+      .then((result) => setUploadedImageURL(result));
   };
-  render() {
-    return (
-      <>
-        {this.state.message && <Messages message={this.state.message} />}
 
+  //Main component render starts here
+  return (
+    <>
+      {addedBlog && <Redirect to="/" />}
+      {loading ? (
+        <LoaderComponent />
+      ) : (
         <AddBlogFormContainer>
+          {error && <Messages>{error}</Messages>}
           <InputComponent
             placeholder="Author"
             name="author"
-            value={this.state.author}
-            onChange={this.handleInputChange}
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
           />
 
           <InputComponent
             placeholder="Enter Blog Category"
             name="category"
-            value={this.state.category}
-            onChange={this.handleInputChange}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+
+          <InputComponent
+            placeholder="Enter Sub Category"
+            name="subcategory"
+            value={subCategory}
+            onChange={(e) => setSubCategory(e.target.value)}
           />
 
           <InputComponent
             placeholder="Enter Blog Title"
             name="title"
-            value={this.state.title}
-            onChange={this.handleInputChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
 
           <InputComponent
             placeholder="Blog Synopsis - Max 200 words"
             name="blogSynopsis"
             maxLength="150"
-            value={this.state.blogSynopsis}
-            onChange={this.handleBlogSynopsis}
+            value={blogSynopsis}
+            onChange={handleBlogSynopsis}
             id="blog-synopsis"
           />
 
           <LabelComponent htmlFor="blogSynopsis">
-            {this.state.blogSynopsis.length
-              ? `${
-                  150 - parseInt(this.state.blogSynopsis.length)
-                } characters left`
+            {blogSynopsis.length
+              ? `${150 - parseInt(blogSynopsis.length)} characters left`
               : ""}
           </LabelComponent>
 
           <EditorContainer>
             <Editor
-              editorState={this.state.editorState}
+              editorState={editorState}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
               editorClassName="editorClassName"
-              onEditorStateChange={this.onEditorStateChange}
+              onEditorStateChange={onEditorStateChange}
             />
           </EditorContainer>
 
@@ -207,24 +197,23 @@ class AddBlogForm extends React.Component {
             <ImageInputButtonDiv>
               <LabelComponent htmlFor="imageInput">UPLOAD</LabelComponent>
               <span>
-                {this.state.uploadedImage &&
-                  `${this.state.uploadedImage} uploaded successfully`}{" "}
+                {uploadedImageURL && `${uploadedImage} uploaded successfully`}{" "}
               </span>
               <InputComponent
                 type="file"
-                onChange={this.handleImageUpload}
+                onChange={handleImageUpload}
                 id="imageInput"
               />
             </ImageInputButtonDiv>
             <div>
-              <img src={`${this.state.uploadedImageURL}`} alt="" />
+              <img src={`${uploadedImageURL}`} alt="" />
             </div>
           </ImageInputContainer>
 
           <PublishButtonContainer>
             <ButtonComponent
               type="submit"
-              onClick={this.handleDraft}
+              onClick={handleDraft}
               theme="secondary"
             >
               SAVE AS DRAFT
@@ -232,16 +221,16 @@ class AddBlogForm extends React.Component {
 
             <ButtonComponent
               type="submit"
-              onClick={this.handlePublish}
+              onClick={handlePublish}
               theme="primary"
             >
               PUBLISH
             </ButtonComponent>
           </PublishButtonContainer>
         </AddBlogFormContainer>
-      </>
-    );
-  }
-}
+      )}
+    </>
+  );
+};
 
 export default AddBlogForm;

@@ -11,6 +11,7 @@ import Signup from "./Components/AuthComponents/Signup/signup.components";
 import AdminHome from "./Screens/AdminScreens/AdminHome/admin.home.components";
 import AddBlogForm from "./Screens/AdminScreens/AddNewPost/add.new.post.component.jsx";
 import AdminViewAllPosts from "./Screens/AdminScreens/AdminViewAllPosts/admin.allposts.component";
+import ManageCategories from "./Screens/AdminScreens/ManageCategories/categories.subheaders.components";
 class App extends React.Component {
   render() {
     return (
@@ -23,6 +24,11 @@ class App extends React.Component {
 
           <Route exact path="/admin/add-new-post" component={AddBlogForm} />
           <Route exact path="/admin-home" component={AdminHome} />
+          <Route
+            exact
+            path="/admin/sub-header-add"
+            component={ManageCategories}
+          />
 
           <Route
             exact

@@ -5,6 +5,7 @@ import {
 } from "../Action-Types/auth.types";
 import { registerUser } from "../Firebase/db";
 import firebase, { provider } from "../Firebase/db";
+
 //Actions regarding Sign Up
 export const signUpAction = (userData) => {
   return async (dispatch) => {

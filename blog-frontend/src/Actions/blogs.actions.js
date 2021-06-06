@@ -1,57 +1,59 @@
-import { getBlog } from "../Action-Types/blog.types";
+import { getBlogTypes, postBlogTypes } from "../Action-Types/blog.types";
 import firebase from "../Firebase/db";
-const db = firebase.firestore();
 
-//Actions Related to GET Blog info from DB
-export const getBlogSnapShotStart = () => ({
-  type: getBlog.GET_BLOG_SNAPSHOTS_LOADING,
-});
-
-export const getBlogSnapShotSuccess = (data) => ({
-  type: getBlog.GET_BLOG_SNAPSHOTS_SUCCESS,
-  payload: data,
-});
-
-export const getBlogSnapShotError = (error) => ({
-  type: getBlog.GET_BLOG_SNAPSHOTS_ERROR,
-  payload: error,
-});
-
-export const getBlogSnapShotAsync = () => async (dispatch) => {
+//Action to fetch all the blogs from firestore from 'posts' collection
+export const getBlogsAction = () => async (dispatch) => {
   try {
-    dispatch(getBlogSnapShotStart());
     let postsArray = [];
-    const postsSnapShot = await db.collection("posts").get();
-    if (!postsSnapShot.empty) {
-      postsArray = postsSnapShot.docs.map((post) => {
-        const {
-          title,
-          category,
-          author,
-          blogContent,
-          publish,
-          uploadedImageURL,
-          blogSynopsis,
-        } = post.data();
-        return {
-          id: post.id,
-          title,
-          category,
-          author,
-          blogContent,
-          publish,
-          uploadedImageURL,
-          blogSynopsis,
-        };
-      });
-    }
+    dispatch({ type: getBlogTypes.GET_BLOG_SNAPSHOTS_LOADING });
+    const collectionRef = firebase.firestore().collection("posts");
 
-    dispatch(getBlogSnapShotSuccess(...postsArray));
+    const snapShot = await collectionRef.get();
+    if (snapShot.empty) {
+      postsArray = [];
+    } else {
+      snapShot.forEach((doc) =>
+        postsArray.push({
+          id: doc.id,
+          ...doc.data(),
+        })
+      );
+    }
+    dispatch({
+      type: getBlogTypes.GET_BLOG_SNAPSHOTS_SUCCESS,
+      payload: postsArray,
+    });
   } catch (error) {
-    const errorMessage =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    dispatch(getBlogSnapShotError(errorMessage));
+    const errorMessage = `${error.code} ### ${error.message}`;
+    dispatch({
+      type: getBlogTypes.GET_BLOG_SNAPSHOTS_ERROR,
+      payload: errorMessage,
+    });
   }
+};
+
+//action to post the blog into firestore 'posts' collection
+export const postBlogAction = (blogData) => async (dispatch) => {
+  try {
+    dispatch({ type: postBlogTypes.POST_BLOG_SNAPSHOTS_LOADING });
+    const res = await firebase
+      .firestore()
+      .collection("posts")
+      .add({ ...blogData });
+    dispatch({
+      type: postBlogTypes.POST_BLOG_SNAPSHOTS_SUCCESS,
+      payload: res.id,
+    });
+  } catch (error) {
+    const errorMessage = `${error.code} ### ${error.message}`;
+    dispatch({
+      type: postBlogTypes.POST_BLOG_SNAPSHOTS_ERROR,
+      payload: errorMessage,
+    });
+  }
+};
+
+//action to reset the state just before doing the post blog
+export const resetStateBeforePostAction = () => (dispatch) => {
+  dispatch({ type: postBlogTypes.POST_BLOG_SNAPSHOT_RESET });
 };
