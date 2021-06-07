@@ -1,5 +1,9 @@
 import { combineReducers } from "redux";
-import { getBlogReducer, postBlogReducer } from "./blogs.reducer";
+import {
+  getBlogReducer,
+  postBlogReducer,
+  getSpecificBlogReducer,
+} from "./blogs.reducer";
 import { signUpReducer } from "./auth.reducers";
 import { SubHeaderReducer } from "./subheader.reducer";
 const rootReducer = combineReducers({
@@ -7,6 +11,7 @@ const rootReducer = combineReducers({
   user: signUpReducer,
   subHeader: SubHeaderReducer,
   newBlog: postBlogReducer,
+  specificPost: getSpecificBlogReducer,
 });
 
 export default rootReducer;

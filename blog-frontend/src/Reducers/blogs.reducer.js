@@ -1,4 +1,8 @@
-import { getBlogTypes, postBlogTypes } from "../Action-Types/blog.types";
+import {
+  getBlogTypes,
+  getSpecificBlogTypes,
+  postBlogTypes,
+} from "../Action-Types/blog.types";
 const initialState = {
   loading: false,
   blogSnapshot: [],
@@ -63,6 +67,42 @@ export const postBlogReducer = (state = initialStatePostBlog, action) => {
         loading: false,
         error: action.payload,
       };
+    default:
+      return state;
+  }
+};
+
+//Reducer to get blog by ID -> i.e a specific Blog
+
+const initialStateSpecificBlog = {
+  loading: false,
+  specificPost: null,
+  error: null,
+};
+export const getSpecificBlogReducer = (
+  state = initialStateSpecificBlog,
+  action
+) => {
+  switch (action.type) {
+    case getSpecificBlogTypes.GET_SPECIFIC_BLOG_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case getSpecificBlogTypes.GET_SPECIFIC_BLOG_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        specificPost: action.payload,
+        error: null,
+      };
+    case getSpecificBlogTypes.GET_SPECIFIC_BLOG_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
     default:
       return state;
   }

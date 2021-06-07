@@ -74,10 +74,9 @@ export const getSpecificBlogACtion = (postID) => async (dispatch) => {
       .doc(`${postID}`)
       .get();
     const data = res.data();
-
     //dispatch success action
     dispatch({
-      type: getSpecificBlogACtion.GET_SPECIFIC_BLOG_SUCCESS,
+      type: getSpecificBlogTypes.GET_SPECIFIC_BLOG_SUCCESS,
       payload: data,
     });
   } catch (error) {
