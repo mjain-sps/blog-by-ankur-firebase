@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import MainTheme from "../../../Theme";
 
-const AllPostsContainer = styled.div``;
+const AllPostsContainer = styled.div`
+  background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};
+`;
 const AllPostsSearchContainer = styled.div`
   width: 50%;
   height: 50px;
@@ -38,63 +40,107 @@ const AllPostsSearchBar = styled.input`
 
 const AllPostsCard = styled.div`
   display: flex;
-  flex-direction: column;
   width: 40%;
-  margin: auto;
-  border: 1px solid black;
+  margin: 20px auto;
+  border: 1px solid rgba(125, 125, 125, 0.4);
   border-radius: 10px;
-  padding: 5px 10px;
-  h5 {
-    text-align: center;
-    font-family: ${MainTheme.fontFamily.montiserrat};
-    font-size: ${MainTheme.fontSize.large};
-    padding: 10px 0px;
-    margin: 0px;
-    border-bottom: 1px solid rgba(125, 125, 125, 0.4);
+  padding: 5px;
+  height: 300px;
+  background-color: ${MainTheme.backgroundColour.BG_WHITE};
+`;
+const CardLeftSection = styled.div`
+  width: 49%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 5px;
+  div:nth-child(1) {
+    width: 100%;
+    align-self: center;
   }
-  p {
-    text-align: center;
+  h5 {
+    width: auto;
     font-family: ${MainTheme.fontFamily.montiserrat};
-    font-size: ${MainTheme.fontSize.medium};
-    color: ${MainTheme.fontColors.darkOrange};
-    padding: 10px 0px;
+    color: ${MainTheme.fontColors.black};
+    border-bottom: 1px solid ${MainTheme.backgroundColour.BG_ORANGE};
+    font-weight: ${MainTheme.fontWeight.bold};
+    font-size: ${MainTheme.fontSize.large};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0px;
     margin: 0px;
-    border-bottom: 1px solid rgba(125, 125, 125, 0.4);
+  }
+
+  p,
+  span {
+    font-family: ${MainTheme.fontFamily.roboto};
+    color: ${MainTheme.fontColors.black};
+    font-weight: ${MainTheme.fontWeight.regular};
+    font-size: ${MainTheme.fontSize.medium};
+    padding: 0px;
+    margin: 0px;
   }
 `;
-
 const Section = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  padding: 10px 0px;
-  margin: 0px;
-
-  img {
-    width: 100px;
-    object-fit: contain;
-    height: 100px;
-  }
-  div {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    align-items: center;
-  }
 `;
-const VerticalDivider = styled.div``;
+
+const VerticalDivider = styled.div`
+  background-color: ${MainTheme.backgroundColour.BG_ORANGE};
+  width: 5px;
+  height: 90%;
+  margin: auto;
+`;
 const BlogSynopsis = styled.div`
-  padding: 10px;
   font-family: ${MainTheme.fontFamily.roboto};
-  color: ${MainTheme.fontColors.gray};
-  font-size: ${MainTheme.fontSize.large};
+  color: ${MainTheme.fontColors.black};
+  font-size: ${MainTheme.fontSize.medium};
 `;
 const BlogContent = styled.div`
+  width: 100%;
   height: 60px;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 1px;
+  font-family: ${MainTheme.fontFamily.montiserrat};
+  color: ${MainTheme.fontColors.gray};
+  font-size: ${MainTheme.fontSize.medium};
+`;
+
+const ReadMoreIcon = styled.div`
+  height: 25px;
+  background-color: ${MainTheme.backgroundColour.BG_ORANGE};
+  width: max-content;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 3px;
+  padding: 3px 5px;
+  a {
+    text-decoration: none;
+  }
+  span {
+    color: ${MainTheme.fontColors.black};
+  }
+`;
+const CardRightSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  width: 49%;
+  height: 100%;
+  text-align: center;
+  img {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    object-fit: cover;
+  }
 `;
 export {
   AllPostsContainer,
@@ -105,4 +151,7 @@ export {
   BlogSynopsis,
   VerticalDivider,
   BlogContent,
+  CardLeftSection,
+  CardRightSection,
+  ReadMoreIcon,
 };
