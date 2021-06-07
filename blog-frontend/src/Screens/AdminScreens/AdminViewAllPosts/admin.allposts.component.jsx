@@ -11,11 +11,17 @@ import {
   BlogSynopsis,
   VerticalDivider,
   BlogContent,
+  CardLeftSection,
+  CardRightSection,
+  ReadMoreIcon,
 } from "./admin.allposts.styles";
 import LoaderComponent from "../../../Components/Loader/loader.component";
 import Messages from "../../../Components/Notifications/messages.component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faAngleDoubleRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 //Main Component renders here
 const AdminViewAllPosts = () => {
@@ -44,25 +50,37 @@ const AdminViewAllPosts = () => {
         blogSnapshot.map((blog) => {
           return (
             <AllPostsCard key={blog.id}>
-              <h5>{blog.title}</h5>
-              <p>Category:{blog.category}</p>
-              <Section>
-                <span>Written By: {blog.author}</span>
-                <span>May 20 2021</span>
-              </Section>
-              <Section>
+              <CardLeftSection>
                 <div>
-                  <span>Blog Pic:</span>
-                  <img src={blog.uploadedImageURL} alt="" />
+                  <h5>{blog.title}</h5>
                 </div>
-                <VerticalDivider />
+                <p>Category:{blog.category}</p>
+                <Section>
+                  <span>Written By: {blog.author}</span>
+                  <span>May 20 2021</span>
+                </Section>
                 <div>
                   <span>Published :{blog.published ? "YES" : "NO"}</span>
                 </div>
-              </Section>
-              <BlogSynopsis>{blog.blogSynopsis}</BlogSynopsis>
-              <BlogContent>{blog.blogContent}</BlogContent>
-              <Link to={`/admin-blog-detail/${blog.id}`}>View</Link>
+
+                <BlogSynopsis>{blog.blogSynopsis}</BlogSynopsis>
+                <BlogContent>{blog.blogContent}</BlogContent>
+                <ReadMoreIcon>
+                  <Link to={`/admin/post-detail/${blog.id}`}>
+                    <span>
+                      {<FontAwesomeIcon icon={faAngleDoubleRight} />} &nbsp;Read
+                      More..
+                    </span>
+                  </Link>
+                </ReadMoreIcon>
+                {/* <Link to={`/admin-blog-detail/${blog.id}`}>View</Link> */}
+              </CardLeftSection>
+
+              <VerticalDivider />
+
+              <CardRightSection>
+                <img src={blog.uploadedImageURL} alt="" />
+              </CardRightSection>
             </AllPostsCard>
           );
         })}

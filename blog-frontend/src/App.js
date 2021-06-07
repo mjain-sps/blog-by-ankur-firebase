@@ -12,6 +12,7 @@ import AdminHome from "./Screens/AdminScreens/AdminHome/admin.home.components";
 import AddBlogForm from "./Screens/AdminScreens/AddNewPost/add.new.post.component.jsx";
 import AdminViewAllPosts from "./Screens/AdminScreens/AdminViewAllPosts/admin.allposts.component";
 import ManageCategories from "./Screens/AdminScreens/ManageCategories/categories.subheaders.components";
+import PostsDetailPage from "./Screens/AdminScreens/ViewSinglePost/post.detailpage.component";
 class App extends React.Component {
   render() {
     return (
@@ -35,6 +36,8 @@ class App extends React.Component {
             path="/admin/view-all-posts"
             component={AdminViewAllPosts}
           />
+
+          <Route path="/admin/post-detail/:id" component={PostsDetailPage} />
         </Router>
       </>
     );

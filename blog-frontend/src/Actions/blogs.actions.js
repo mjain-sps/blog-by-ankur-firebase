@@ -1,4 +1,8 @@
-import { getBlogTypes, postBlogTypes } from "../Action-Types/blog.types";
+import {
+  getBlogTypes,
+  postBlogTypes,
+  getSpecificBlogTypes,
+} from "../Action-Types/blog.types";
 import firebase from "../Firebase/db";
 
 //Action to fetch all the blogs from firestore from 'posts' collection
@@ -56,4 +60,32 @@ export const postBlogAction = (blogData) => async (dispatch) => {
 //action to reset the state just before doing the post blog
 export const resetStateBeforePostAction = () => (dispatch) => {
   dispatch({ type: postBlogTypes.POST_BLOG_SNAPSHOT_RESET });
+};
+
+//action to fetch a specific Blog
+export const getSpecificBlogACtion = (postID) => async (dispatch) => {
+  console.log("post id", postID);
+  try {
+    dispatch({ type: getSpecificBlogTypes.GET_SPECIFIC_BLOG_LOADING });
+    //make async requests to firebase to get the specific post
+    const res = await firebase
+      .firestore()
+      .collection("posts")
+      .doc(`${postID}`)
+      .get();
+    const data = res.data();
+
+    //dispatch success action
+    dispatch({
+      type: getSpecificBlogACtion.GET_SPECIFIC_BLOG_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorMessage = `${error.code} ### ${error.message}`;
+    console.log(errorMessage);
+    dispatch({
+      type: getSpecificBlogTypes.GET_SPECIFIC_BLOG_ERROR,
+      payload: errorMessage,
+    });
+  }
 };
