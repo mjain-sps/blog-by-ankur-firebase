@@ -35,7 +35,6 @@ const ManageCategories = () => {
       setCategoriesDistinct(distinctCat);
     }
   }, [dispatch, blogSnapshot]);
-
   //All Functions here
   const handleToggle = (e) => {
     if (e.target.checked === true) {

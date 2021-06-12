@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -38,8 +38,11 @@ import OutfitsStyleSubHeader from "../SubHeaders/Outfits-SubHeader/outfits.subhe
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //importing ACTIONS
 import { logoutAction } from "../../Actions/auth.actions.js";
+import { subHeaderGetAction } from "../../Actions/subheader.actions.js";
+//Importing Loader and Messages components
 import LoaderComponent from "../Loader/loader.component.jsx";
 import Messages from "../Notifications/messages.component.jsx";
+
 //Main Component Starts
 const Header = (props) => {
   const [toggleSubHeader, setToggleSubHeader] = useState(false);
@@ -48,6 +51,9 @@ const Header = (props) => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(subHeaderGetAction());
+  }, [dispatch]);
   // We will fetch user and the blogs from the state
   const currentUserFromState = useSelector((state) => state.user);
   const {
@@ -62,6 +68,15 @@ const Header = (props) => {
     blogSnapshot: blogPosts,
     error: postError,
   } = blogsFromState;
+
+  const subHeaderCheckedFromState = useSelector(
+    (state) => state.subHeaderChecked
+  );
+  const {
+    loading: subHeaderLoading,
+    subHeader,
+    error: errorSubHeader,
+  } = subHeaderCheckedFromState;
 
   const handleSubNavBarToggleON = () => {
     setToggleSubHeader(true);
@@ -137,30 +152,32 @@ const Header = (props) => {
             {/* Here we will fetch the categories from state which have been marked as subheader -Checked categories */}
             {/* First get all categories from posts and then filter only those which have checked against them */}
 
-            {loadingBlog ? (
+            {loadingBlog && subHeaderLoading ? (
               <LoaderComponent />
-            ) : postError ? (
-              <Messages>{postError}</Messages>
+            ) : postError && errorSubHeader ? (
+              <Messages>{postError || errorSubHeader}</Messages>
             ) : (
-              blogPosts &&
-              blogPosts.length &&
-              blogPosts.map((post) => {
+              subHeader &&
+              subHeader.length &&
+              subHeader.map((checkedSubHeader) => {
                 return (
                   <NavItem
-                    to={`/${post.category}`}
-                    name={`${post.category.toUpperCase()}`}
+                    key={checkedSubHeader.id}
+                    to={`/${checkedSubHeader.category}`}
+                    name={`${checkedSubHeader.category.toUpperCase()}`}
                     currentPath={
-                      props.location.pathname === `/${post.category}`
+                      props.location.pathname ===
+                      `/${checkedSubHeader.category}`
                         ? "CURRENT"
                         : null
                     }
                     onMouseEnter={() => {
                       handleSubNavBarToggleON();
-                      setCurrentSubNav(post.category.toUpperCase());
+                      setCurrentSubNav(checkedSubHeader.category.toUpperCase());
                     }}
                     onMouseLeave={handleSubNavBarToggleOFF}
                   >
-                    {post.category.toUpperCase()}
+                    {checkedSubHeader.category.toUpperCase()}
                   </NavItem>
                 );
               })
@@ -177,8 +194,12 @@ const Header = (props) => {
             onMouseEnter={handleSubNavBarToggleON}
             onMouseLeave={handleSubNavBarToggleOFF}
           >
-            {currentNav === "LIFESTYLE" && <LifeStyleSubHeader />}
-            {currentNav === "OUTFITS" && <OutfitsStyleSubHeader />}
+            {
+              <LifeStyleSubHeader
+                currentNav={currentNav}
+                blogPosts={blogPosts}
+              />
+            }
           </SubHeaderContainer>
         )}
       </HeaderContainer>

@@ -5,11 +5,15 @@ import {
   getSpecificBlogReducer,
 } from "./blogs.reducer";
 import { signUpReducer } from "./auth.reducers";
-import { SubHeaderReducer } from "./subheader.reducer";
+import {
+  SubHeaderAddReducer,
+  subHeaderCheckedReducer,
+} from "./subheader.reducer";
 const rootReducer = combineReducers({
   blogSnapshot: getBlogReducer,
   user: signUpReducer,
-  subHeader: SubHeaderReducer,
+  subHeaderAdded: SubHeaderAddReducer,
+  subHeaderChecked: subHeaderCheckedReducer,
   newBlog: postBlogReducer,
   specificPost: getSpecificBlogReducer,
 });
