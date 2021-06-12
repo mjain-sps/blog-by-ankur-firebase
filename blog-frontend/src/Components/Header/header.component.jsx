@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 //importing the styled compoments
 import {
@@ -38,196 +38,152 @@ import OutfitsStyleSubHeader from "../SubHeaders/Outfits-SubHeader/outfits.subhe
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //importing ACTIONS
 import { logoutAction } from "../../Actions/auth.actions.js";
+import LoaderComponent from "../Loader/loader.component.jsx";
+import Messages from "../Notifications/messages.component.jsx";
 //Main Component Starts
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggleSubHeader: false,
-      viewSubNavBar: false,
-      currentNav: "HOME",
-    };
-  }
+const Header = (props) => {
+  const [toggleSubHeader, setToggleSubHeader] = useState(false);
+  const [viewSubNavBar, setViewSubNavBar] = useState(false);
+  const [currentNav, setCurrentNav] = useState("HOME");
 
-  handleSubNavBarToggleON = () => {
-    this.setState({ toggleSubHeader: true });
+  const dispatch = useDispatch();
+
+  // We will fetch user and the blogs from the state
+  const currentUserFromState = useSelector((state) => state.user);
+  const {
+    loading: loadingUser,
+    user: currentUser,
+    error: errorUser,
+  } = currentUserFromState;
+
+  const blogsFromState = useSelector((state) => state.blogSnapshot);
+  const {
+    loading: loadingBlog,
+    blogSnapshot: blogPosts,
+    error: postError,
+  } = blogsFromState;
+
+  const handleSubNavBarToggleON = () => {
+    setToggleSubHeader(true);
   };
 
-  handleSubNavBarToggleOFF = () => {
-    this.setState({ toggleSubHeader: false });
+  const handleSubNavBarToggleOFF = () => {
+    setToggleSubHeader(false);
   };
 
-  setCurrentSubNav = (subHeaderName) => {
-    this.setState({ currentNav: subHeaderName });
+  const setCurrentSubNav = (subHeaderName) => {
+    setCurrentNav(subHeaderName);
   };
 
-  handleSignOut = () => {
+  const handleSignOut = () => {
     //Dispatching Action
-    const { logoutAction } = this.props;
-    logoutAction();
+    dispatch(logoutAction());
   };
-  render() {
-    const currentDate = new Date();
-    return (
-      <>
-        <HeaderContainer>
-          <SocialMediaDiv>
-            <div>{currentDate.toDateString()}</div>
-            <SocialMediaDivRightSideContainer>
-              <div>
-                <span>
-                  <FontIcon icon={faFacebookSquare} />
-                </span>
-                <span>
-                  <FontIcon icon={faLinkedin} />
-                </span>
-                <span>
-                  <FontIcon icon={faYoutube} />
-                </span>
-              </div>
-              <div>
-                {this.props.currentUser &&
-                  this.props.currentUser.user &&
-                  this.props.currentUser.user.uid ===
-                    "MWzRulcpeQd7buPIaPyfiLZrYmG3" && (
-                    <Link to="/admin-home">
-                      {<FontAwesomeIcon icon={faCrown} />}
-                    </Link>
-                  )}
-              </div>
-              <div>
-                {!this.props.currentUser.user ? (
-                  <Link to="/signin">
-                    <FontAwesomeIcon icon={faSignInAlt} />
-                  </Link>
-                ) : (
-                  <Link to="/" onClick={this.handleSignOut}>
-                    <FontAwesomeIcon icon={faSignOutAlt} />
+
+  const currentDate = new Date();
+  return (
+    <>
+      <HeaderContainer>
+        <SocialMediaDiv>
+          <div>{currentDate.toDateString()}</div>
+          <SocialMediaDivRightSideContainer>
+            <div>
+              <span>
+                <FontIcon icon={faFacebookSquare} />
+              </span>
+              <span>
+                <FontIcon icon={faLinkedin} />
+              </span>
+              <span>
+                <FontIcon icon={faYoutube} />
+              </span>
+            </div>
+            <div>
+              {/* We have to add loading and error user handlers here */}
+
+              {currentUser &&
+                currentUser.uid === "MWzRulcpeQd7buPIaPyfiLZrYmG3" && (
+                  <Link to="/admin-home">
+                    {<FontAwesomeIcon icon={faCrown} />}
                   </Link>
                 )}
-              </div>
-            </SocialMediaDivRightSideContainer>
-          </SocialMediaDiv>
-          <LogoSection>
-            <Logo src={logo} />
-          </LogoSection>
-          <Navbar>
-            <NavItemsContainer>
-              <NavItem
-                to="/"
-                name="home"
-                currentpath={
-                  this.props.location.pathname === "/" ? "CURRENT" : null
-                }
-              >
-                HOME
-              </NavItem>
-
-              <NavItem
-                to="/lifestyle"
-                name="LIFESTYLE"
-                currentpath={
-                  this.props.location.pathname === "/lifestyle"
-                    ? "CURRENT"
-                    : null
-                }
-                onMouseEnter={() => {
-                  this.handleSubNavBarToggleON();
-                  this.setCurrentSubNav("LIFESTYLE");
-                }}
-                onMouseLeave={this.handleSubNavBarToggleOFF}
-              >
-                LIFESTYLE
-              </NavItem>
-
-              <NavItem
-                to="/outfits"
-                name="OUTFITS"
-                currentpath={
-                  this.props.location.pathname === "/outfits" ? "CURRENT" : null
-                }
-                onMouseEnter={() => {
-                  this.handleSubNavBarToggleON();
-                  this.setCurrentSubNav("OUTFITS");
-                }}
-                onMouseLeave={this.handleSubNavBarToggleOFF}
-              >
-                OUTFITS
-              </NavItem>
-
-              <NavItem
-                to="/haircare"
-                name="HAIRCARE"
-                currentpath={
-                  this.props.location.pathname === "/haircare"
-                    ? "CURRENT"
-                    : null
-                }
-                onMouseEnter={() => {
-                  this.handleSubNavBarToggleON();
-                  this.setCurrentSubNav("HAIRCARE");
-                }}
-                onMouseLeave={this.handleSubNavBarToggleOFF}
-              >
-                HAIRCARE
-              </NavItem>
-
-              <NavItem
-                to="/makeup"
-                name="MAKEUP"
-                currentpath={
-                  this.props.location.pathname === "/makeup" ? "CURRENT" : null
-                }
-                onMouseEnter={() => {
-                  this.handleSubNavBarToggleON();
-                  this.setCurrentSubNav("MAKEUP");
-                }}
-                onMouseLeave={this.handleSubNavBarToggleOFF}
-              >
-                MAKEUP
-              </NavItem>
-
-              <NavItem
-                to="/beauty"
-                name="BEAUTY"
-                currentpath={
-                  this.props.location.pathname === "/beauty" ? "CURRENT" : null
-                }
-                onMouseEnter={() => {
-                  this.handleSubNavBarToggleON();
-                  this.setCurrentSubNav("BEAUTY");
-                }}
-                onMouseLeave={this.handleSubNavBarToggleOFF}
-              >
-                BEAUTY
-              </NavItem>
-            </NavItemsContainer>
-
-            <SearchBar>
-              <FontIcon icon={faSearch} />
-            </SearchBar>
-          </Navbar>
-
-          {this.state.toggleSubHeader && (
-            <SubHeaderContainer
-              onMouseEnter={this.handleSubNavBarToggleON}
-              onMouseLeave={this.handleSubNavBarToggleOFF}
+            </div>
+            <div>
+              {!currentUser ? (
+                <Link to="/signin">
+                  <FontAwesomeIcon icon={faSignInAlt} />
+                </Link>
+              ) : (
+                <Link to="/" onClick={handleSignOut}>
+                  <FontAwesomeIcon icon={faSignOutAlt} />
+                </Link>
+              )}
+            </div>
+          </SocialMediaDivRightSideContainer>
+        </SocialMediaDiv>
+        <LogoSection>
+          <Logo src={logo} />
+        </LogoSection>
+        <Navbar>
+          <NavItemsContainer>
+            <NavItem
+              to="/"
+              name="home"
+              currentpath={props.location.pathname === "/" ? "CURRENT" : null}
             >
-              {this.state.currentNav === "LIFESTYLE" && <LifeStyleSubHeader />}
-              {this.state.currentNav === "OUTFITS" && <OutfitsStyleSubHeader />}
-            </SubHeaderContainer>
-          )}
-        </HeaderContainer>
-      </>
-    );
-  }
-}
+              HOME
+            </NavItem>
 
-const mapStateToProps = (state) => ({
-  currentUser: state.user,
-});
+            {/* Here we will fetch the categories from state which have been marked as subheader -Checked categories */}
+            {/* First get all categories from posts and then filter only those which have checked against them */}
 
-const mapDispatchToProps = (dispatch) => ({
-  logoutAction: () => dispatch(logoutAction()),
-});
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
+            {loadingBlog ? (
+              <LoaderComponent />
+            ) : postError ? (
+              <Messages>{postError}</Messages>
+            ) : (
+              blogPosts &&
+              blogPosts.length &&
+              blogPosts.map((post) => {
+                return (
+                  <NavItem
+                    to={`/${post.category}`}
+                    name={`${post.category.toUpperCase()}`}
+                    currentPath={
+                      props.location.pathname === `/${post.category}`
+                        ? "CURRENT"
+                        : null
+                    }
+                    onMouseEnter={() => {
+                      handleSubNavBarToggleON();
+                      setCurrentSubNav(post.category.toUpperCase());
+                    }}
+                    onMouseLeave={handleSubNavBarToggleOFF}
+                  >
+                    {post.category.toUpperCase()}
+                  </NavItem>
+                );
+              })
+            )}
+          </NavItemsContainer>
+
+          <SearchBar>
+            <FontIcon icon={faSearch} />
+          </SearchBar>
+        </Navbar>
+
+        {toggleSubHeader && (
+          <SubHeaderContainer
+            onMouseEnter={handleSubNavBarToggleON}
+            onMouseLeave={handleSubNavBarToggleOFF}
+          >
+            {currentNav === "LIFESTYLE" && <LifeStyleSubHeader />}
+            {currentNav === "OUTFITS" && <OutfitsStyleSubHeader />}
+          </SubHeaderContainer>
+        )}
+      </HeaderContainer>
+    </>
+  );
+};
+
+export default withRouter(Header);

@@ -12,6 +12,20 @@ export const SubHeaderReducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
+
+    case subHeaderAddTypes.SUBHEADER_ADD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        subHeader: action.payload,
+        error: null,
+      };
+
+    case subHeaderAddTypes.SUBHEADER_ADD_ERROR:
+      return {
+        ...state,
+        loading: true,
+      };
     default:
       return state;
   }
