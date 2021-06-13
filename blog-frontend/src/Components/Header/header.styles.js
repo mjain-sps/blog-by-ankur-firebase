@@ -8,6 +8,9 @@ const HeaderContainer = styled.div`
   position: absolute;
   top: 0%;
   left: 0%;
+  @media (max-width: 576px) {
+    height: 40vh;
+  }
 `;
 
 const SocialMediaDiv = styled.div`
@@ -22,6 +25,11 @@ const SocialMediaDiv = styled.div`
   color: ${MainTheme.fontColors.black};
   font-size: ${MainTheme.fontSize.medium};
   font-weight: ${MainTheme.fontWeight.medium};
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 5px 20px 0px 15px;
+    margin: 0px;
+  }
 `;
 const SocialMediaDivRightSideContainer = styled.div`
   display: flex;
@@ -29,6 +37,9 @@ const SocialMediaDivRightSideContainer = styled.div`
   width: 30%;
   a {
     color: ${MainTheme.fontColors.black};
+  }
+  @media (max-width: 576px) {
+    width: max-content;
   }
 `;
 const LogoSection = styled.div`
@@ -49,6 +60,9 @@ const Navbar = styled.div`
   display: grid;
   grid-template-areas: "navitems . searchbar";
   align-items: center;
+  @media (max-width: 576px) {
+    width: 90%;
+  }
 `;
 
 const NavItemsContainer = styled.div`

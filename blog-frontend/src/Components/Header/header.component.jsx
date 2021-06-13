@@ -34,7 +34,7 @@ import {
 import logo from "../../Assets/Home-Page/Logo.jpeg";
 //importing the SubHeader Components
 import LifeStyleSubHeader from "../SubHeaders/Lifestyle-SubHeader/lifestyle.subheader.component";
-import OutfitsStyleSubHeader from "../SubHeaders/Outfits-SubHeader/outfits.subheader.component";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //importing ACTIONS
 import { logoutAction } from "../../Actions/auth.actions.js";
@@ -165,7 +165,7 @@ const Header = (props) => {
                     key={checkedSubHeader.id}
                     to={`/${checkedSubHeader.category}`}
                     name={`${checkedSubHeader.category.toUpperCase()}`}
-                    currentPath={
+                    currentpath={
                       props.location.pathname ===
                       `/${checkedSubHeader.category}`
                         ? "CURRENT"
@@ -197,7 +197,9 @@ const Header = (props) => {
             {
               <LifeStyleSubHeader
                 currentNav={currentNav}
-                blogPosts={blogPosts}
+                relevantBlogPosts={blogPosts.filter(
+                  (ele) => ele.category.toUpperCase() === currentNav
+                )}
               />
             }
           </SubHeaderContainer>

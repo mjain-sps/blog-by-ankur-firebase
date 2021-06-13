@@ -5,38 +5,33 @@ import {
 import firebase from "../Firebase/db";
 import { resetStateBeforePostAction } from "./blogs.actions";
 
-export const addSubHeaderAction =
-  (checkedCategoriesData) => async (dispatch) => {
-    const { checked } = checkedCategoriesData;
-    // const checkedCat = [
-    //   ...new Map(
-    //     checked.map((item) => [item["category"], item.category, item.id])
-    //   ).values(),
-    // ];
-    // console.log(checkedCat);
-    try {
-      dispatch({ type: subHeaderAddTypes.SUBHEADER_ADD_LOADING });
-      await firebase
-        .firestore()
-        .collection("subheader")
-        .doc("checkedCategories")
-        .set({
-          ...checked,
-        });
-
-      dispatch({
-        type: subHeaderAddTypes.SUBHEADER_ADD_SUCCESS,
-        payload: "UPDATED SUCCESSFULLY",
+export const addSubHeaderAction = (checkedCategoriesData) => async (
+  dispatch
+) => {
+  const { checked } = checkedCategoriesData;
+  try {
+    dispatch({ type: subHeaderAddTypes.SUBHEADER_ADD_LOADING });
+    await firebase
+      .firestore()
+      .collection("subheader")
+      .doc("checkedCategories")
+      .set({
+        ...checked,
       });
-    } catch (error) {
-      const errorMessage = `${error.code} ### ${error.message}`;
 
-      dispatch({
-        type: subHeaderAddTypes.SUBHEADER_ADD_ERROR,
-        payload: errorMessage,
-      });
-    }
-  };
+    dispatch({
+      type: subHeaderAddTypes.SUBHEADER_ADD_SUCCESS,
+      payload: "UPDATED/ADDED SUCCESSFULLY",
+    });
+  } catch (error) {
+    const errorMessage = `${error.code} ### ${error.message}`;
+
+    dispatch({
+      type: subHeaderAddTypes.SUBHEADER_ADD_ERROR,
+      payload: errorMessage,
+    });
+  }
+};
 
 //Action to fetch the Subheaders
 

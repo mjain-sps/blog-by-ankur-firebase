@@ -11,8 +11,10 @@ import Signup from "./Components/AuthComponents/Signup/signup.components";
 import AdminHome from "./Screens/AdminScreens/AdminHome/admin.home.components";
 import AddBlogForm from "./Screens/AdminScreens/AddNewPost/add.new.post.component.jsx";
 import AdminViewAllPosts from "./Screens/AdminScreens/AdminViewAllPosts/admin.allposts.component";
-import ManageCategories from "./Screens/AdminScreens/ManageCategories/categories.subheaders.components";
+import ManageCategories from "./Screens/AdminScreens/ManageCategoriesForSubHeaders/categories.subheaders.components";
 import PostsDetailPage from "./Screens/AdminScreens/ViewSinglePost/post.detailpage.component";
+import ManageCategoriesForHomeScreenDisplay from "./Screens/AdminScreens/ManageCatagoriesForHomeScreen/categories.homescreendisplay";
+
 class App extends React.Component {
   render() {
     return (
@@ -35,6 +37,12 @@ class App extends React.Component {
             exact
             path="/admin/view-all-posts"
             component={AdminViewAllPosts}
+          />
+
+          <Route
+            exact
+            path="/admin/home-screen-category-add"
+            component={ManageCategoriesForHomeScreenDisplay}
           />
 
           <Route path="/admin/post-detail/:id" component={PostsDetailPage} />

@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import MainTheme from "../../../Theme";
 const LifeStyleContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 3fr;
   width: 100%;
   height: 100%;
+  display: flex;
   overflow: hidden;
 
   /* margin-top: -15px; */
@@ -12,6 +11,7 @@ const LifeStyleContainer = styled.div`
 const LifeStyleSideNav = styled.div`
   background-color: ${MainTheme.backgroundColour.BG_WHITESMOKE};
   display: flex;
+  width: 15%;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-end;
@@ -39,6 +39,7 @@ const LifeStyleMainContent = styled.div`
   justify-content: space-evenly;
   align-items: center;
   padding: 10px;
+  width: 85%;
 `;
 
 export {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   LifeStyleContainer,
   LifeStyleSideNav,
@@ -8,61 +8,101 @@ import {
 
 //importing common components
 import CardComponentSubHeader from "../Common-Components/common.components";
-const LifeStyleSubHeader = ({ blogPosts, currentNav }) => {
+
+//importing Loader component
+import LoaderComponent from "../../Loader/loader.component";
+//Main Function starts
+const LifeStyleSubHeader = ({ relevantBlogPosts, currentNav }) => {
   const [currentSubNav, setCurrentSubNav] = useState("ALL");
+  const [combinedSubCategories, setCombinedSubCategories] = useState([]);
+
+  useEffect(() => {
+    let tempArray = [];
+    if (relevantBlogPosts.length) {
+      relevantBlogPosts.forEach((ele) => {
+        if (!tempArray.length) {
+          tempArray.push({
+            subcategory: ele.subCategory,
+            data: [ele],
+            id: ele.id,
+          });
+        } else {
+          const found = tempArray.find(
+            (e) => e.subcategory === ele.subCategory
+          );
+          if (!found) {
+            tempArray.push({
+              subcategory: ele.subCategory,
+              data: [ele],
+              id: ele.id,
+            });
+          } else {
+            const index = tempArray.indexOf(found);
+            tempArray[index].data.push(ele);
+          }
+        }
+      });
+    }
+    setCombinedSubCategories(tempArray);
+  }, [relevantBlogPosts]);
 
   return (
     <>
-      <LifeStyleContainer>
-        <LifeStyleSideNav>
-          <ListStylesNavItem onMouseEnter={() => setCurrentSubNav("ALL")}>
-            ALL
-          </ListStylesNavItem>
+      {combinedSubCategories.length ? (
+        <LifeStyleContainer>
+          <LifeStyleSideNav>
+            {/* This will basically show 'ALL' in the side nav bar */}
+            <ListStylesNavItem onMouseEnter={() => setCurrentSubNav("ALL")}>
+              ALL
+            </ListStylesNavItem>
 
-          {blogPosts
-            .filter((ele) => ele.category === currentNav)
-            .map((data) => {
+            {/* This will show all the subCategories under selected category as side navbars */}
+            {/* We will wait for Use Effect to run the function and make a combined Sub headers array */}
+            {/* Only after that we will start rendering the side navbars, as we do not want duplicate subcategory to be shown in side navbar */}
+            {combinedSubCategories.map((ele) => {
               return (
                 <ListStylesNavItem
-                  key={data.id}
-                  onMouseEnter={() => setCurrentSubNav(data.subCategory)}
+                  key={ele.id}
+                  onMouseEnter={() => setCurrentSubNav(ele.subcategory)}
                 >
-                  {data.subCategory}
+                  {ele.subcategory.toUpperCase()}
                 </ListStylesNavItem>
               );
             })}
-        </LifeStyleSideNav>
-        <LifeStyleMainContent>
-          {/* Now we will map the same component using Data file --ALL(DEFAULT state) */}
-          {currentSubNav === "ALL"
-            ? blogPosts
-                .filter((ele) => ele.category === currentNav)
-                .map(({ id, img, content }) => {
-                  return (
-                    <CardComponentSubHeader
-                      key={id}
-                      img={img}
-                      content={content}
-                    />
-                  );
+          </LifeStyleSideNav>
+
+          <LifeStyleMainContent>
+            {/* Now we will map the same component using Data file --ALL(DEFAULT state) */}
+            {currentSubNav === "ALL"
+              ? combinedSubCategories.map(({ subcategory, data }) => {
+                  return data.map((actualData) => {
+                    return (
+                      <CardComponentSubHeader
+                        key={actualData.id}
+                        img={actualData.uploadedImageURL}
+                        content={`${subcategory} - ${actualData.blogSynopsis}`}
+                      />
+                    );
+                  });
                 })
-            : blogPosts
-                .filter(
-                  (ele) =>
-                    ele.category === currentNav &&
-                    ele.subCategory === currentNav
-                )
-                .map(({ id, img, content }) => {
-                  return (
-                    <CardComponentSubHeader
-                      key={id}
-                      img={img}
-                      content={content}
-                    />
-                  );
-                })}
-        </LifeStyleMainContent>
-      </LifeStyleContainer>
+              : combinedSubCategories
+                  .filter((ele) => ele.subcategory === currentSubNav)
+                  .map(({ data }) => {
+                    return data.map((actualData) => {
+                      return (
+                        <CardComponentSubHeader
+                          key={actualData.id}
+                          img={actualData.uploadedImageURL}
+                          content={actualData.blogSynopsis}
+                        />
+                      );
+                    });
+                  })}
+          </LifeStyleMainContent>
+        </LifeStyleContainer>
+      ) : (
+        <LoaderComponent />
+      )}
     </>
   );
 };

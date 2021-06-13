@@ -9,7 +9,7 @@ const SubHeaderCard = styled.div`
   padding: 0px 5px;
 `;
 const SubHeaderCardImage = styled.img`
-  width: 100%;
+  height: 80%;
   object-fit: contain;
 `;
 

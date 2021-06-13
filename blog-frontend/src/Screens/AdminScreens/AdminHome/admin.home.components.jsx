@@ -1,4 +1,5 @@
 import React from "react";
+//importing Styled components
 import {
   AdminContainer,
   AdminCard,
@@ -6,12 +7,14 @@ import {
   AdminCardContent,
   AdminCardIcon,
 } from "./admin.home.styles";
+//Importing Icons and methods
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBinoculars,
   faFile,
   faHighlighter,
 } from "@fortawesome/free-solid-svg-icons";
+
 const AdminHome = (props) => {
   return (
     <>
@@ -53,6 +56,19 @@ const AdminHome = (props) => {
           <AdminCardContent>
             <AdminCardContent>
               Manage Categories w.r.t Sub Headers
+            </AdminCardContent>
+          </AdminCardContent>
+        </AdminCard>
+
+        {/* Card to Manage Categories w.rt HomeScreen */}
+        <AdminCard
+          onClick={() => props.history.push("/admin/home-screen-category-add")}
+        >
+          <AdminCardTitle>MANAGE CATEGORIES </AdminCardTitle>
+          <AdminCardIcon>{<FontAwesomeIcon icon={faFile} />}</AdminCardIcon>
+          <AdminCardContent>
+            <AdminCardContent>
+              Manage Categories w.r.t HOME SCREEN
             </AdminCardContent>
           </AdminCardContent>
         </AdminCard>

@@ -4,7 +4,7 @@ import Layout from "../../Components/Layout/layout.components";
 
 //importing action functions
 import { getBlogsAction } from "../../Actions/blogs.actions";
-
+import { viewCategoriesHomeScreenAction } from "../../Actions/category.homescreen.actions";
 //importing Loader & Notifications Component
 import LoaderComponent from "../../Components/Loader/loader.component";
 import Messages from "../../Components/Notifications/messages.component";
@@ -40,17 +40,27 @@ import {
   Comments,
   LatestBlogContentSynopsis,
   LatestBlogReadMoreButton,
+  CategoryTitle,
+  BorderBottomDiv,
 } from "./home.styles.js";
+
 //Main component starts
 const HomeScreen = () => {
   //define react-reduc constants
   const dispatch = useDispatch();
   const blogFromState = useSelector((state) => state.blogSnapshot);
+  const categoriesToBeDisplayedOnHomeScreenFromState = useSelector(
+    (state) => state.homeScreenCategoriesChecked
+  );
   const { loading, error, blogSnapshot: blogs } = blogFromState;
+  const { loadingView, checkedCategoriesForHomeScreen, errorViewCategories } =
+    categoriesToBeDisplayedOnHomeScreenFromState;
 
   //Lets dispatch the action to fetch the posts
+  //We will also fetch the checked categories which have been marked to be displayed on home screen by the admin
   useEffect(() => {
     dispatch(getBlogsAction());
+    dispatch(viewCategoriesHomeScreenAction());
   }, [dispatch]);
   return loading ? (
     <LoaderComponent />
@@ -64,9 +74,9 @@ const HomeScreen = () => {
 
         {/* Section 2 of the Home page which shows the Featured Blogs */}
         <HomeSectionContainer>
-          <Title>
-            <span>FEATURED</span>
-          </Title>
+          <CategoryTitle>
+            <h1>FEATURED</h1>
+          </CategoryTitle>
           <CardContainer>
             <CardWithSingleImage>
               <BackDrop />
@@ -108,48 +118,72 @@ const HomeScreen = () => {
           </CardContainer>
         </HomeSectionContainer>
 
-        {/* Section 3 of the Home Page which shows Latest Blogs */}
+        {/* Section 3 of the Home Page which shows Blogs based on Categories as Marked as Checked by the Admin */}
+        {/* In case admin has marked no entry then we will display any 5 categories. This functionality to be added later */}
+        {/* Also I have to add functional to set loading and error handling of checkedCategoriesHomeScreen */}
+        {checkedCategoriesForHomeScreen.length &&
+          checkedCategoriesForHomeScreen.map((ele) => {
+            return (
+              <>
+                <CategoryTitle>
+                  <h1>{ele.category.toUpperCase()}</h1>
+                </CategoryTitle>
+                <div>
+                  {blogs
+                    .filter((e) => e.category === ele.category)
+                    .map((blog) => {
+                      return (
+                        <HomeSectionContainer>
+                          <Title>
+                            <span>{blog.title.toUpperCase()}</span>
+                          </Title>
+                          <LatestBlogCardContainer>
+                            <LatestBlogImageWrapper>
+                              <LatestBlogCardImage
+                                src={blog.uploadedImageURL}
+                                alt=""
+                              />
+                            </LatestBlogImageWrapper>
 
-        <HomeSectionContainer>
-          <Title>
-            <span>LATEST</span>
-          </Title>
-          <LatestBlogCardContainer>
-            <LatestBlogImageWrapper>
-              <LatestBlogCardImage src={featuredImage1} alt="" />
-            </LatestBlogImageWrapper>
+                            <LatestBlogContentWrapper>
+                              <LatestBlogContentTitle>
+                                <span>{blog.blogSynopsis}</span>
+                              </LatestBlogContentTitle>
 
-            <LatestBlogContentWrapper>
-              <LatestBlogContentTitle>
-                <span>What to Wear on First Date? We asked the Exerts...</span>
-              </LatestBlogContentTitle>
+                              <LatestBlogContentAuthor>
+                                <DisplayPicAuthor
+                                  src={authorDisplayPic}
+                                  alt=""
+                                />
+                                <AuthorCredentials>
+                                  <span>{blog.author}</span>
+                                  <span>June 3 2021</span>
+                                </AuthorCredentials>
+                                <Comments>
+                                  <span className="commentValue">1</span>
+                                  <span>
+                                    <FontAwesomeIcon icon={faCommentAlt} />
+                                  </span>
+                                </Comments>
+                              </LatestBlogContentAuthor>
 
-              <LatestBlogContentAuthor>
-                <DisplayPicAuthor src={authorDisplayPic} alt="" />
-                <AuthorCredentials>
-                  <span>Ankur Jain</span>
-                  <span>June 3 2021</span>
-                </AuthorCredentials>
-                <Comments>
-                  <span className="commentValue">1</span>
-                  <span>
-                    <FontAwesomeIcon icon={faCommentAlt} />
-                  </span>
-                </Comments>
-              </LatestBlogContentAuthor>
+                              <LatestBlogContentSynopsis>
+                                {blog.blogContent}
+                              </LatestBlogContentSynopsis>
 
-              <LatestBlogContentSynopsis>
-                Find people with high expectations and a low tolerance for
-                excuses. They'll have higher expectations for you than you have
-                for yourself. Don't flatter yourself that this has much to do
-                with you - this is just who they are. Don't look for "nice" in
-                these relationships....
-              </LatestBlogContentSynopsis>
-
-              <LatestBlogReadMoreButton>READ MORE</LatestBlogReadMoreButton>
-            </LatestBlogContentWrapper>
-          </LatestBlogCardContainer>
-        </HomeSectionContainer>
+                              <LatestBlogReadMoreButton>
+                                READ MORE
+                              </LatestBlogReadMoreButton>
+                            </LatestBlogContentWrapper>
+                          </LatestBlogCardContainer>
+                        </HomeSectionContainer>
+                      );
+                    })}
+                </div>
+                <BorderBottomDiv></BorderBottomDiv>
+              </>
+            );
+          })}
       </Layout>
     )
   );
