@@ -12,7 +12,8 @@ const fireBaseConfig = {
 };
 
 const firebase = Firebase.initializeApp(fireBaseConfig);
-firebase.firestore().settings({ timestampsInSnapshots: true });
+
+// firebase.firestore().settings({ timestampsInSnapshots: true });
 
 //We are setting up the authentication functions here
 
@@ -50,11 +51,5 @@ provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 provider.setCustomParameters({
   login_hint: "user@example.com",
 });
-// export const signInWithGoogleFunction = () => {
-//   firebase
-//     .auth()
-//     .signInWithPopup(provider)
-//     .then((resp) => console.log("resp", resp))
-//     .catch((err) => console.log("err", err));
-// };
+
 export default firebase;

@@ -12,14 +12,26 @@ export const signUpAction = (userData) => {
     dispatch({ type: signupTypes.SIGN_UP_LOADING });
     try {
       const { email: userDataEmail, password } = userData;
-      const user = await registerUser(userDataEmail, password);
+      const { user } = await registerUser(userDataEmail, password);
+      if (user) {
+        //I want to post the user in users collection in firestore
+        const userRef = firebase
+          .firestore()
+          .collection("users")
+          .doc(`${user.uid}`);
+        const userSnapShot = await userRef.get();
+        if (!userSnapShot.exists) {
+          const data = {
+            uid: user.uid,
+            email: user.email,
+          };
+          userRef.set(data);
+        }
+      }
       dispatch({ type: signupTypes.SIGN_UP_SUCCESS, payload: user });
     } catch (error) {
-      const errorReturned = {
-        errorCode: error.code,
-        errorMessage: error.message,
-      };
-      dispatch({ type: signupTypes.SIGN_UP_ERROR, payload: errorReturned });
+      const errorMessage = `${error.code} ### ${error.message}`;
+      dispatch({ type: signupTypes.SIGN_UP_ERROR, payload: errorMessage });
     }
   };
 };

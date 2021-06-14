@@ -1,5 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import {
   AuthContainer,
   AuthTitle,
@@ -16,103 +17,83 @@ import LoaderComponent from "../../Loader/loader.component";
 import { signUpAction } from "../../../Actions/auth.actions";
 
 //Main component starts
-class Signup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "",
-      password: "",
-      password2: "",
-      user: null,
-    };
-  }
+const Signup = (props) => {
+  const { loading, user, error } = useSelector((state) => state.user);
 
-  componentDidUpdate() {
-    const { user } = this.props.currentUser;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
     if (user) {
-      this.props.history.push("/");
+      props.history.push("/");
     }
-  }
-  //All functions go here
+  }, [props.history, user]);
 
-  handleSignup = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    if (!this.state.email || !this.state.password2 || !this.state.password) {
+    if (!email || !password2 || !password) {
       alert("Cannot leave fields blank. Please fill form completely");
-    } else if (this.state.password !== this.state.password2) {
+    } else if (password !== password2) {
       alert("password do not match");
     } else {
-      const { email, password } = this.state;
       const userData = { email, password };
-      this.props.signUpAction(userData);
+      dispatch(signUpAction(userData));
     }
   };
 
-  render() {
-    const { loading, error } = this.props.currentUser;
+  return loading ? (
+    <LoaderComponent />
+  ) : (
+    <AuthContainer>
+      {error && <Messages>{error}</Messages>}
 
-    return loading ? (
-      <LoaderComponent />
-    ) : error ? (
-      <Messages>{error}</Messages>
-    ) : (
-      <AuthContainer>
-        <Messages>
-          {this.state.errorMessage ||
-            (this.state.errorCode &&
-              `${this.state.errorCode} #### ${this.state.errorMessage}`)}
-        </Messages>
-        <AuthTitle>Signup</AuthTitle>
+      <AuthTitle>Signup</AuthTitle>
 
-        <AuthForm>
-          <AuthFormControl>
-            <AuthInput
-              type="email"
-              id="email"
-              value={this.state.email}
-              onChange={(e) => this.setState({ email: e.target.value })}
-            />
-            <AuthLabel htmlFor="email">Enter Email</AuthLabel>
-          </AuthFormControl>
+      <AuthForm>
+        <AuthFormControl>
+          <AuthInput
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <AuthLabel htmlFor="email">Enter Email</AuthLabel>
+        </AuthFormControl>
 
-          <AuthFormControl>
-            <AuthInput
-              type="password"
-              id="password"
-              value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
-            />
-            <AuthLabel>Password</AuthLabel>
-          </AuthFormControl>
+        <AuthFormControl>
+          <AuthInput
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <AuthLabel>Password</AuthLabel>
+        </AuthFormControl>
 
-          <AuthFormControl>
-            <AuthInput
-              type="password"
-              id="password2"
-              value={this.state.password2}
-              onChange={(e) => this.setState({ password2: e.target.value })}
-            />
-            <AuthLabel>Password Again</AuthLabel>
-          </AuthFormControl>
+        <AuthFormControl>
+          <AuthInput
+            type="password"
+            id="password2"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+          />
+          <AuthLabel>Password Again</AuthLabel>
+        </AuthFormControl>
 
-          <ButtonComponent
-            type="submit"
-            onClick={this.handleSignup}
-            theme="primary"
-            width="50"
-          >
-            Login
-          </ButtonComponent>
-        </AuthForm>
-      </AuthContainer>
-    );
-  }
-}
-const mapStateToProps = (state) => ({
-  currentUser: state.user,
-});
+        <ButtonComponent
+          type="submit"
+          onClick={handleSignup}
+          theme="primary"
+          width="50"
+        >
+          Login
+        </ButtonComponent>
+      </AuthForm>
+    </AuthContainer>
+  );
+};
 
-const mapDispatchToProps = (dispatch) => ({
-  signUpAction: (user) => dispatch(signUpAction(user)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default Signup;

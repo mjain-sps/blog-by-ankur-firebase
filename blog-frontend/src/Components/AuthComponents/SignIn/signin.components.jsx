@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   AuthContainer,
@@ -11,91 +11,87 @@ import {
   AuthLabel,
 } from "../signin.styles";
 
+//importing components
 import ButtonComponent from "../../Button/button.component";
+import LoaderComponent from "../../Loader/loader.component";
+import Messages from "../../Notifications/messages.component";
 
-//importint sign in Action
+//important sign in Action
 import { signInUserAction } from "../../../Actions/auth.actions.js";
 
 //Main component starts here
-class SigninComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "",
-      password: "",
-    };
-  }
+const SigninComponent = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  const currentUserFromState = useSelector((state) => state.user);
+  const { loading, error, user } = currentUserFromState;
+
+  const dispatch = useDispatch();
   //To check if user is already logged in
-  componentDidUpdate() {
-    const { user } = this.props.currentUser;
+  useEffect(() => {
     if (user) {
-      this.props.history.push("/");
+      props.history.push("/");
     }
-  }
+  }, [props.history, user]);
 
   //Defining all the functions here
-  handleLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!this.state.email || !this.state.password) {
+    if (!email || !password) {
       alert("Please fill the details. ");
     } else {
-      const { email, password } = this.state;
       const userCredentials = { email, password };
-      this.props.signInUserAction(userCredentials);
+      dispatch(signInUserAction(userCredentials));
     }
   };
 
   //Main Component render starts here
-  render() {
-    return (
-      <>
-        <AuthContainer>
-          <AuthTitle>
-            <span>Sign In</span>
-          </AuthTitle>
+  return loading ? (
+    <LoaderComponent />
+  ) : (
+    <>
+      {error && <Messages>{error}</Messages>}
+      <AuthContainer>
+        <AuthTitle>
+          <span>Sign In</span>
+        </AuthTitle>
 
-          <AuthForm>
-            <AuthFormControl>
-              <AuthInput
-                type="email"
-                id="email"
-                value={this.state.email}
-                onChange={(e) => this.setState({ email: e.target.value })}
-              />
-              <AuthLabel htmlFor="email">Enter Email</AuthLabel>
-            </AuthFormControl>
+        <AuthForm>
+          <AuthFormControl>
+            <AuthInput
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <AuthLabel htmlFor="email">Enter Email</AuthLabel>
+          </AuthFormControl>
 
-            <AuthFormControl>
-              <AuthInput
-                type="password"
-                id="password"
-                value={this.state.password}
-                onChange={(e) => this.setState({ password: e.target.value })}
-              />
-              <AuthLabel>Password</AuthLabel>
-            </AuthFormControl>
-            <ButtonComponent
-              type="submit"
-              onClick={this.handleLogin}
-              theme="primary"
-              width="50"
-            >
-              Login
-            </ButtonComponent>
-          </AuthForm>
-          <h5>
-            Not a user <Link to="/signup">Sign up</Link>
-          </h5>
-        </AuthContainer>
-      </>
-    );
-  }
-}
+          <AuthFormControl>
+            <AuthInput
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <AuthLabel>Password</AuthLabel>
+          </AuthFormControl>
+          <ButtonComponent
+            type="submit"
+            onClick={handleLogin}
+            theme="primary"
+            width="50"
+          >
+            Login
+          </ButtonComponent>
+        </AuthForm>
+        <h5>
+          Not a user <Link to="/signup">Sign up</Link>
+        </h5>
+      </AuthContainer>
+    </>
+  );
+};
 
-const mapDispatchToProps = (dispatch) => ({
-  signInUserAction: (userCredentials) =>
-    dispatch(signInUserAction(userCredentials)),
-});
-
-export default withRouter(connect(null, mapDispatchToProps)(SigninComponent));
+export default withRouter(SigninComponent);

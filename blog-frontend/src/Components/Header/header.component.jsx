@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 //importing the styled compoments
@@ -97,25 +97,24 @@ const Header = (props) => {
 
   const currentDate = new Date();
   return (
-    <>
+    <BrowserRouter>
       <HeaderContainer>
         <SocialMediaDiv>
           <div>{currentDate.toDateString()}</div>
           <SocialMediaDivRightSideContainer>
             <div>
               <span>
-                <FontIcon icon={faFacebookSquare} />
+                <FontIcon icon={faFacebookSquare} data-testid="icon" />
               </span>
               <span>
-                <FontIcon icon={faLinkedin} />
+                <FontIcon icon={faLinkedin} data-testid="icon" />
               </span>
               <span>
-                <FontIcon icon={faYoutube} />
+                <FontIcon icon={faYoutube} data-testid="icon" />
               </span>
             </div>
             <div>
               {/* We have to add loading and error user handlers here */}
-
               {currentUser &&
                 currentUser.uid === "MWzRulcpeQd7buPIaPyfiLZrYmG3" && (
                   <Link to="/admin-home">
@@ -125,11 +124,11 @@ const Header = (props) => {
             </div>
             <div>
               {!currentUser ? (
-                <Link to="/signin">
+                <Link to="/signin" data-testid="signin-link">
                   <FontAwesomeIcon icon={faSignInAlt} />
                 </Link>
               ) : (
-                <Link to="/" onClick={handleSignOut}>
+                <Link to="/" data-testid="signout-link" onClick={handleSignOut}>
                   <FontAwesomeIcon icon={faSignOutAlt} />
                 </Link>
               )}
@@ -205,7 +204,7 @@ const Header = (props) => {
           </SubHeaderContainer>
         )}
       </HeaderContainer>
-    </>
+    </BrowserRouter>
   );
 };
 
