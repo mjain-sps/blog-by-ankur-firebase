@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  customRender,
-  fireEvent,
-  waitFor,
-} from "../../../custom-render-test-utils";
+import { customRender, fireEvent } from "../../../custom-render-test-utils";
 import "@testing-library/jest-dom/extend-expect";
 import Signup from "./signup.components";
 
