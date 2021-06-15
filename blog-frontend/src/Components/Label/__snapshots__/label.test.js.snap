@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Label component label component snapshot testing 1`] = `
+<div>
+  <label
+    class="sc-bdnxRM jVUQSi"
+    for="input-id"
+  />
+</div>
+`;

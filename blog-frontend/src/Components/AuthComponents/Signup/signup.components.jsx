@@ -58,6 +58,7 @@ const Signup = (props) => {
             type="email"
             id="email"
             value={email}
+            data-testid="email"
             onChange={(e) => setEmail(e.target.value)}
           />
           <AuthLabel htmlFor="email">Enter Email</AuthLabel>
@@ -68,6 +69,7 @@ const Signup = (props) => {
             type="password"
             id="password"
             value={password}
+            data-testid="password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <AuthLabel>Password</AuthLabel>
@@ -77,6 +79,7 @@ const Signup = (props) => {
           <AuthInput
             type="password"
             id="password2"
+            data-testid="password2"
             value={password2}
             onChange={(e) => setPassword2(e.target.value)}
           />

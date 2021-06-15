@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot testing of component 1`] = `
+<div>
+  <label
+    class="sc-gtsrHT geEOoQ"
+  >
+    <input
+      class="sc-bdnxRM hwrWxp"
+      type="checkbox"
+      value=""
+    />
+    <span
+      class="sc-dlnjwi cfPyCM"
+    />
+  </label>
+</div>
+`;

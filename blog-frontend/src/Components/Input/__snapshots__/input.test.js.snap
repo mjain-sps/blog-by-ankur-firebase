@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input component check input snapshot 1`] = `
+<div>
+  <input
+    class="sc-bdnxRM cQVKlz"
+    id="email-id"
+    maxlength="16"
+    name="email"
+    placeholder="dummy input"
+    type="email"
+    value="Madhur Jain"
+  />
+</div>
+`;

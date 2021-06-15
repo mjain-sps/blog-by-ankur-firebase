@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check the button component snapshot check snapshot if width is null 1`] = `
+<div>
+  <button
+    class="sc-bdnxRM iVoCAH"
+    type="button"
+    width="100"
+  />
+</div>
+`;
+
+exports[`check the button component snapshot check snapshot if width present 1`] = `
+<div>
+  <button
+    class="sc-bdnxRM hwEZbu"
+    type="button"
+    width="50%"
+  />
+</div>
+`;

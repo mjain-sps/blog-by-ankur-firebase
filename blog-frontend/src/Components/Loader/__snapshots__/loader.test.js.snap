@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check snapshot of loader component 1`] = `
+<div>
+  <div
+    class="sc-bdnxRM igcGgs"
+  >
+    <div
+      class="sc-gtsrHT gHGYp"
+    >
+      <div
+        class="sc-dlnjwi kWgJn"
+      />
+      <div
+        class="sc-dlnjwi kWgJn"
+      />
+      <div
+        class="sc-dlnjwi kWgJn"
+      />
+    </div>
+  </div>
+</div>
+`;

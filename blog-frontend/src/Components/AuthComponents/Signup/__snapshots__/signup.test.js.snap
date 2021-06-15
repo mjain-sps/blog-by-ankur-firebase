@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signup components tests To take a snapshot of component 1`] = `
+<div>
+  <div
+    class="sc-bdnxRM dkmzgK"
+  >
+    <div
+      class="sc-gtsrHT gAQZhd"
+    >
+      Signup
+    </div>
+    <form
+      class="sc-dlnjwi hrJjEv"
+    >
+      <div
+        class="sc-hKFxyN kodvPp"
+      >
+        <input
+          class="sc-eCApnc bgDbDW"
+          data-testid="email"
+          id="email"
+          type="email"
+          value=""
+        />
+        <label
+          class="sc-jSFjdj jigzJV"
+          for="email"
+        >
+          Enter Email
+        </label>
+      </div>
+      <div
+        class="sc-hKFxyN kodvPp"
+      >
+        <input
+          class="sc-eCApnc bgDbDW"
+          data-testid="password"
+          id="password"
+          type="password"
+          value=""
+        />
+        <label
+          class="sc-jSFjdj jigzJV"
+        >
+          Password
+        </label>
+      </div>
+      <div
+        class="sc-hKFxyN kodvPp"
+      >
+        <input
+          class="sc-eCApnc bgDbDW"
+          data-testid="password2"
+          id="password2"
+          type="password"
+          value=""
+        />
+        <label
+          class="sc-jSFjdj jigzJV"
+        >
+          Password Again
+        </label>
+      </div>
+      <button
+        class="sc-gKAaRy fcfiWv"
+        type="submit"
+        width="50"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+</div>
+`;
