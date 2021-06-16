@@ -87,8 +87,7 @@ const Signup = (props) => {
         </AuthFormControl>
 
         <ButtonComponent
-          type="submit"
-          data-testid="signup-button"
+          type="button"
           onClick={handleSignup}
           theme="primary"
           width="50"

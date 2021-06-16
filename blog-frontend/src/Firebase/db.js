@@ -12,6 +12,10 @@ const fireBaseConfig = {
 };
 
 const firebase = Firebase.initializeApp(fireBaseConfig);
+// var db = firebase.firestore();
+// if (window.location.hostname === "localhost") {
+//   db.useEmulator("localhost", 8080);
+// }
 
 // firebase.firestore().settings({ timestampsInSnapshots: true });
 

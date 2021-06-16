@@ -64,7 +64,7 @@ exports[`Signup components tests To take a snapshot of component 1`] = `
       </div>
       <button
         class="sc-gKAaRy fcfiWv"
-        type="submit"
+        type="button"
         width="50"
       >
         Login

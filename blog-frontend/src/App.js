@@ -15,6 +15,7 @@ import ManageCategories from "./Screens/AdminScreens/ManageCategoriesForSubHeade
 import PostsDetailPage from "./Screens/AdminScreens/ViewSinglePost/post.detailpage.component";
 import ManageCategoriesForHomeScreenDisplay from "./Screens/AdminScreens/ManageCatagoriesForHomeScreen/categories.homescreendisplay";
 
+//Doing testing to firebase emulator, hence making a dummy screen
 class App extends React.Component {
   render() {
     return (
