@@ -88,6 +88,7 @@ const Signup = (props) => {
 
         <ButtonComponent
           type="submit"
+          data-testid="signup-button"
           onClick={handleSignup}
           theme="primary"
           width="50"
